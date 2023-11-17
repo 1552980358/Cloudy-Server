@@ -2,6 +2,7 @@ use mongodb::{Client, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
 use crate::mongodb::{Mongodb, self_panic};
+use crate::mongodb::collections::Account;
 use crate::mongodb::mongodb_env;
 
 impl Mongodb {
@@ -25,7 +26,11 @@ impl Mongodb {
             database
         ).await;
 
+        let account = storage_database.collection::<Account>(
+            Account::name()
+        );
         Mongodb::new(
+            account
         )
     }
 

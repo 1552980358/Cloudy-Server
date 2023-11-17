@@ -1,4 +1,6 @@
 use std::fmt::Display;
+use mongodb::Collection;
+use crate::mongodb::collections::Account;
 
 mod mongodb_env;
 mod mongodb_connect;
@@ -14,12 +16,19 @@ fn self_panic<M: Display>(message: M) -> ! {
  * [Mongodb]
  **/
 pub struct Mongodb {
+
+    pub account: Collection<Account>,
+
 }
 
 impl Mongodb {
 
-    fn new() -> Self {
-        Self {}
+    fn new(
+        account: Collection<Account>,
+    ) -> Self {
+        Self {
+            account
+        }
     }
 
 }
