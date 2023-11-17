@@ -1,11 +1,13 @@
 use std::fmt::Display;
 use mongodb::Collection;
-use crate::mongodb::collections::Account;
 
-mod mongodb_env;
-mod mongodb_connect;
+#[path = "mongodb/mongodb-env.rs"]
+mod env;
+#[path = "mongodb/mongodb-connect.rs"]
+mod connect;
 
 mod collections;
+use collections::Account;
 
 const PANIC: &str = "Mongodb Panic: ";
 fn self_panic<M: Display>(message: M) -> ! {

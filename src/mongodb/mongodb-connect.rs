@@ -3,19 +3,19 @@ use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, Serv
 
 use crate::mongodb::{Mongodb, self_panic};
 use crate::mongodb::collections::Account;
-use crate::mongodb::mongodb_env;
+use crate::mongodb::env;
 
 impl Mongodb {
 
     pub async fn connect() -> Self {
-        let server_host = mongodb_env::server_host();
-        let server_port = mongodb_env::server_port();
+        let server_host = env::server_host();
+        let server_port = env::server_port();
 
-        let credential_source = mongodb_env::credential_source();
-        let credential_username = mongodb_env::credential_username();
-        let credential_password = mongodb_env::credential_password();
+        let credential_source = env::credential_source();
+        let credential_username = env::credential_username();
+        let credential_password = env::credential_password();
 
-        let database = mongodb_env::database();
+        let database = env::database();
 
         let storage_database = connect_storage(
             // Server Address
