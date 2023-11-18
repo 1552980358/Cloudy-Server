@@ -13,3 +13,6 @@ features = ["http2", "default", "json"]
 
 [dependencies.mongodb]
 version = "2.7.0"
+
+[dependencies.jsonwebtoken]
+version = "9.1.0"
