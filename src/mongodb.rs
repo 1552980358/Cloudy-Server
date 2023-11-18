@@ -6,8 +6,8 @@ mod env;
 #[path = "mongodb/mongodb-connect.rs"]
 mod connect;
 
-mod collections;
-use collections::Account;
+pub mod collections;
+use collections::{Account, AccountToken};
 
 const PANIC: &str = "Mongodb Panic: ";
 fn self_panic<M: Display>(message: M) -> ! {
@@ -21,15 +21,19 @@ pub struct Mongodb {
 
     pub account: Collection<Account>,
 
+    pub account_token: Collection<AccountToken>,
+
 }
 
 impl Mongodb {
 
     fn new(
         account: Collection<Account>,
+        account_token: Collection<AccountToken>,
     ) -> Self {
         Self {
-            account
+            account,
+            account_token
         }
     }
 

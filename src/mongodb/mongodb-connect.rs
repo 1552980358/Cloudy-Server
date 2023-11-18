@@ -1,8 +1,8 @@
-use mongodb::{Client, Database};
+use mongodb::{Client, Collection, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
 use crate::mongodb::{Mongodb, self_panic};
-use crate::mongodb::collections::Account;
+use crate::mongodb::collections::{Account, AccountToken};
 use crate::mongodb::env;
 
 impl Mongodb {
@@ -17,7 +17,7 @@ impl Mongodb {
 
         let database = env::database();
 
-        let storage_database = connect_storage(
+        let database = connect_database(
             // Server Address
             server_host, server_port,
             // Credential
@@ -26,17 +26,16 @@ impl Mongodb {
             database
         ).await;
 
-        let account = storage_database.collection::<Account>(
-            Account::name()
-        );
+        let account = account(&database);
+        let account_token = account_token(&database);
         Mongodb::new(
-            account
+            account, account_token
         )
     }
 
 }
 
-async fn connect_storage(
+async fn connect_database(
     server_host: Option<String>,
     server_port: Option<String>,
     credential_source: Option<String>,
@@ -140,4 +139,12 @@ fn request_database(
                 .unwrap_or_else(|| self_panic("Database not found"))
         }
     }
+}
+
+fn account(database: &Database) -> Collection<Account> {
+    database.collection::<Account>(Account::name())
+}
+
+fn account_token(database: &Database) -> Collection<AccountToken> {
+    database.collection::<AccountToken>(AccountToken::name())
 }
