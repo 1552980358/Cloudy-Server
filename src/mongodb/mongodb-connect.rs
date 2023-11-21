@@ -67,20 +67,11 @@ fn build_server_address(
     server_host: Option<String>,
     server_port: Option<String>,
 ) -> ServerAddress {
-    let server_host = match server_host {
-        Some(server_host) => { server_host }
-        None => { SERVER_ADDRESS_DEFAULT_LOCALHOST.to_string() }
-    };
+    let server_host = server_host.unwrap_or_else(|| SERVER_ADDRESS_DEFAULT_LOCALHOST.to_string());
 
-    let server_port = match server_port {
-        Some(server_port) => {
-            match server_port.parse::<u16>() {
-                Ok(server_port) => { Some(server_port) }
-                Err(_) => { None }
-            }
-        }
-        None => { None }
-    };
+    let server_port = server_port.and_then(|origin| {
+        origin.parse::<u16>().ok()
+    });
 
     ServerAddress::Tcp {
         host: server_host,
