@@ -1,10 +1,11 @@
-use mongodb::bson::oid::ObjectId;
+use mongodb::bson::serde_helpers::serialize_hex_string_as_object_id;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
 
-    pub _id: ObjectId,
+    #[serde(rename = "_id", serialize_with = "serialize_hex_string_as_object_id")]
+    pub id: String,
 
     pub username: String,
     pub password: String,

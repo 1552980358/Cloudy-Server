@@ -1,12 +1,18 @@
-use mongodb::bson::oid::ObjectId;
+use mongodb::bson::serde_helpers::serialize_hex_string_as_object_id;
 use serde::{Deserialize, Serialize};
+
+#[path = "account-token/account-token-find-account.rs"]
+mod find_account;
+pub use find_account::FindAccount;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountToken {
 
-    pub _id: ObjectId,
+    #[serde(rename = "_id", serialize_with = "serialize_hex_string_as_object_id")]
+    pub id: String,
 
-    pub account: ObjectId,
+    #[serde(serialize_with = "serialize_hex_string_as_object_id")]
+    pub account: String,
 
     pub issue: usize,
     pub duration: usize,
@@ -22,10 +28,6 @@ impl AccountToken {
 
     pub fn name<'a>() -> &'a str {
         COLLECTION_ACCOUNT_TOKEN
-    }
-
-    pub fn account(&self) -> String {
-        self.account.to_hex()
     }
 
 }
