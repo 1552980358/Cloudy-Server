@@ -1,8 +1,9 @@
 use jsonwebtoken::{Algorithm, DecodingKey, TokenData, Validation};
-use jsonwebtoken::errors::Error as JWTError;
 
 use crate::jwt::claims::JWTClaims;
 use crate::jwt::JWT;
+
+type Result<R> = jsonwebtoken::errors::Result<R>;
 
 impl JWT {
 
@@ -24,7 +25,7 @@ impl JWT {
     pub fn decode(
         &self,
         jwt: String
-    ) -> Result<TokenData<JWTClaims>, JWTError> {
+    ) -> Result<TokenData<JWTClaims>> {
         let decoding_key = self.decoding_key();
         let validation = self.validation();
 
