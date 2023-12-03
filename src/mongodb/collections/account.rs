@@ -1,10 +1,19 @@
-use mongodb::bson::serde_helpers::serialize_hex_string_as_object_id;
+use mongodb::bson::serde_helpers::{
+    serialize_hex_string_as_object_id,
+    deserialize_hex_string_from_object_id
+};
 use serde::{Deserialize, Serialize};
+
+#[path = "account/account-login.rs"]
+mod login;
+pub use login::Login;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
 
-    #[serde(rename = "_id", serialize_with = "serialize_hex_string_as_object_id")]
+    #[serde(rename = "_id")]
+    #[serde(serialize_with = "serialize_hex_string_as_object_id")]
+    #[serde(deserialize_with = "deserialize_hex_string_from_object_id")]
     pub id: String,
 
     pub username: String,
