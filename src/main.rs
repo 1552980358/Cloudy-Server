@@ -9,6 +9,9 @@ use jwt::JWT;
 
 mod util;
 
+mod api;
+use api::auth;
+
 #[launch]
 async fn server() -> _ {
     let mongodb = Mongodb::connect().await;
@@ -17,4 +20,5 @@ async fn server() -> _ {
     rocket::build()
         .manage(mongodb)
         .manage(jwt)
+        .mount(auth::route(), auth::routes())
 }
