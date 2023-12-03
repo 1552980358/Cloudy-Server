@@ -1,17 +1,16 @@
 #[path = "auth/auth-post.rs"]
 mod auth_post;
-
-use rocket::Route;
 use auth_post::post;
 
-const ROUTE_API: &str = "/auth";
+use rocket::Route;
 
+const ROUTE_AUTH: &str = "/auth";
 pub fn route<'a>() -> &'a str {
-    ROUTE_API
+    ROUTE_AUTH
 }
 
 pub fn routes() -> Vec<Route> {
-    return routes![
+    routes![
         post,
     ]
 }
