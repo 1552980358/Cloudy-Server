@@ -21,7 +21,7 @@ fn self_panic<M: Display>(message: M) -> ! {
 }
 
 pub struct JWT {
-    secret: String,
+    pub secret: String,
     algorithm: Algorithm,
 }
 
