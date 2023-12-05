@@ -4,6 +4,8 @@ use mongodb::bson::serde_helpers::{
 };
 use serde::{Deserialize, Serialize};
 
+use crate::mongodb::object_id::object_new_hex;
+
 #[path = "account/account-login.rs"]
 mod login;
 pub use login::Login;
@@ -18,6 +20,7 @@ pub struct Account {
     #[serde(rename = "_id")]
     #[serde(serialize_with = "serialize_hex_string_as_object_id")]
     #[serde(deserialize_with = "deserialize_hex_string_from_object_id")]
+    #[serde(default = "object_new_hex")]
     pub id: String,
 
     pub username: String,

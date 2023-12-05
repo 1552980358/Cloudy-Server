@@ -7,6 +7,10 @@ mod env;
 mod connect;
 
 pub mod collections;
+
+#[path = "mongodb/mongodb-object-id.rs"]
+mod object_id;
+
 use collections::{Account, AccountToken};
 
 const PANIC: &str = "Mongodb Panic: ";
