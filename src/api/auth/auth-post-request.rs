@@ -1,8 +1,9 @@
 use rocket::data::{FromData, Outcome, ToByteUnit};
 use rocket::{Data, Request};
-use rocket::http::{ContentType, Status};
+use rocket::http::{Status};
 
 use crate::api::auth::auth_post::AuthRequestBody;
+use crate::rocket::PostRequestHeader;
 
 type AuthRequestBodyDecodeResult = serde_json::error::Result<AuthRequestBody>;
 impl AuthRequestBody {
@@ -25,7 +26,7 @@ impl<'r> FromData<'r> for AuthRequestBody {
     type Error = AuthRequestError;
 
     async fn from_data(request: &'r Request<'_>, data: Data<'r>) -> Outcome<'r, Self> {
-        if !request.json_type() {
+        if !request.is_json_content() {
             return Outcome::Error(
                 (Status::BadRequest, AuthRequestError::InvalidContentType)
             )
@@ -52,31 +53,6 @@ impl<'r> FromData<'r> for AuthRequestBody {
                     (Status::BadRequest, AuthRequestError::InvalidJSONContent)
                 )
             })
-    }
-
-}
-
-trait AuthRequest {
-
-    fn json_type(&self) -> bool;
-
-    fn content_length(&self) -> Option<i32>;
-
-}
-
-const HEADER_CONTENT_LENGTH: &str = "Content-Length";
-impl AuthRequest for Request<'_> {
-
-    fn json_type(&self) -> bool {
-        self.content_type()
-            .map(|content_type| *content_type == ContentType::JSON)
-            .unwrap_or_else(|| false)
-    }
-
-    fn content_length(&self) -> Option<i32> {
-        self.headers().get_one(HEADER_CONTENT_LENGTH)
-            .map(|content_length| content_length.parse::<i32>().ok())
-            .flatten()
     }
 
 }
