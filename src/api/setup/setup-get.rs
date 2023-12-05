@@ -7,7 +7,7 @@ use crate::jwt::JWT;
 use crate::mongodb::{Mongodb, collections::account::FindOwner};
 
 #[derive(Serialize, Debug)]
-struct SetupResponse {
+pub struct SetupResponse {
     has_owner: bool,
 }
 
@@ -25,4 +25,3 @@ pub async fn get(
     };
     Ok(Json(setup_response))
 }
-
