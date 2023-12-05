@@ -1,7 +1,7 @@
 use Rocket::http::ContentType;
 use Rocket::Request;
 
-pub trait PostRequestHeader {
+pub trait Header {
 
     fn is_json_content(&self) -> bool;
 
@@ -11,7 +11,7 @@ pub trait PostRequestHeader {
 
 const HEADER_CONTENT_LENGTH: &str = "Content-Length";
 
-impl PostRequestHeader for Request<'_> {
+impl Header for Request<'_> {
 
     fn is_json_content(&self) -> bool {
         self.content_type()

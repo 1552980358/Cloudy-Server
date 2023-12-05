@@ -3,7 +3,7 @@ use rocket::{Data, Request};
 use rocket::http::{Status};
 
 use crate::api::auth::auth_post::AuthRequestBody;
-use crate::rocket::PostRequestHeader;
+use crate::rocket::RequestHeader;
 
 type AuthRequestBodyDecodeResult = serde_json::error::Result<AuthRequestBody>;
 impl AuthRequestBody {
