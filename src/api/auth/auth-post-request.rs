@@ -1,9 +1,9 @@
-use rocket::data::{FromData, Outcome, ToByteUnit};
+use rocket::data::{FromData, Outcome};
 use rocket::{Data, Request};
 use rocket::http::{Status};
 
 use crate::api::auth::auth_post::AuthRequestBody;
-use crate::rocket::RequestHeader;
+use crate::rocket::{RequestHeader, PostData};
 
 type AuthRequestBodyDecodeResult = serde_json::error::Result<AuthRequestBody>;
 impl AuthRequestBody {
@@ -38,7 +38,7 @@ impl<'r> FromData<'r> for AuthRequestBody {
             )
         };
 
-        let Ok(request_body) = data.read_request_body(content_length).await else {
+        let Ok(request_body) = data.string(content_length).await else {
             return Outcome::Error(
                 (Status::BadRequest, AuthRequestError::InvalidContent)
             )
@@ -55,20 +55,4 @@ impl<'r> FromData<'r> for AuthRequestBody {
             })
     }
 
-}
-
-type AuthRequestReadDataError = std::io::Result<String>;
-#[async_trait]
-trait AuthRequestData {
-    async fn read_request_body(self, content_length: i32) -> AuthRequestReadDataError;
-}
-
-#[async_trait]
-impl<'r> AuthRequestData for Data<'r> {
-    async fn read_request_body(self, content_length: i32) -> AuthRequestReadDataError {
-        self.open(content_length.bytes())
-            .into_string()
-            .await
-            .map(|request_data| request_data.value)
-    }
 }
