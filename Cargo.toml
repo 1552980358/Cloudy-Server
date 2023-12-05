@@ -8,9 +8,10 @@ edition = "2021"
 [dependencies.serde]
 version = "1.0.193"
 features = ["derive"]
-[dependencies]
-serde_json = "1.0.108"
+[dependencies.serde_json]
+version = "1.0.108"
 
+# Rocket and related
 [dependencies.rocket]
 version = "0.5.0"
 features = ["http2", "default", "json"]
