@@ -2,6 +2,8 @@
 mod setup_get;
 use setup_get::get;
 
+mod owner;
+
 use rocket::Route;
 
 const ROUTE_SETUP: &str = "/setup";
@@ -11,6 +13,10 @@ pub fn route<'a>() -> &'a str {
 
 pub fn routes() -> Vec<Route> {
     routes![
+        /* /setup */
         get,
+
+        /* /setup/owner */
+        owner::post
     ]
 }
