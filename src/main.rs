@@ -28,7 +28,7 @@ async fn server() -> _ {
 #[cfg(debug_assertions)]
 mod rocket;
 #[cfg(debug_assertions)]
-use rocket::CORS;
+use rocket::{CORS, OPTIONS};
 
 #[cfg(debug_assertions)]
 #[launch]
@@ -39,6 +39,8 @@ async fn server() -> _ {
     Rocket::build()
         // CORS only for debug use
         .attach(CORS)
+        // OPTIONS method only for debug use
+        .attach(OPTIONS)
         .manage(mongodb)
         .manage(jwt)
         .mount(setup::route(), setup::routes())
