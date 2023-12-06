@@ -30,15 +30,8 @@ pub struct Account {
 
     pub role: Role,
 
-}
-
-const COLLECTION_ACCOUNT: &str = "account";
-
-impl Account {
-
-    pub fn name<'a>() -> &'a str {
-        COLLECTION_ACCOUNT
-    }
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avatar: Option<String>
 
 }
 
@@ -53,5 +46,15 @@ pub enum Role {
 
     #[serde(rename = "user")]
     User
+
+}
+
+const COLLECTION_ACCOUNT: &str = "account";
+
+impl Account {
+
+    pub fn name<'a>() -> &'a str {
+        COLLECTION_ACCOUNT
+    }
 
 }
