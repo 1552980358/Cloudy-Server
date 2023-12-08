@@ -6,7 +6,7 @@ use crate::mongodb::env;
 
 impl MongoDB {
 
-    pub fn connect() -> Self {
+    pub fn build() -> Self {
         let server_host = env::server_host();
         let server_port = env::server_port();
 
@@ -16,7 +16,7 @@ impl MongoDB {
 
         let database = env::database();
 
-        let database = connect_database(
+        let database = build_database(
             // Server Address
             server_host, server_port,
             // Credential
@@ -30,7 +30,7 @@ impl MongoDB {
 
 }
 
-fn connect_database(
+fn build_database(
     server_host: Option<String>,
     server_port: Option<String>,
     credential_source: Option<String>,

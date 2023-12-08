@@ -15,7 +15,7 @@ use api::{setup, auth};
 #[cfg(not(debug_assertions))]
 #[launch]
 async fn server() -> _ {
-    let mongodb = MongoDB::connect().await;
+    let mongodb = MongoDB::build();
     let jwt = JWT::setup().await;
 
     Rocket::build()
@@ -33,7 +33,7 @@ use rocket::{CORS, OPTIONS};
 #[cfg(debug_assertions)]
 #[launch]
 async fn server() -> _ {
-    let mongodb = MongoDB::connect();
+    let mongodb = MongoDB::build();
     let jwt = JWT::setup().await;
 
     Rocket::build()
