@@ -16,11 +16,11 @@ use api::{setup, auth};
 #[launch]
 async fn server() -> _ {
     let mongodb = MongoDB::build();
-    let jwt = JWT::setup().await;
+    let jwt = JWT::setup();
 
     Rocket::build()
         .manage(mongodb)
-        .manage(jwt)
+        .manage(jwt.await)
         .mount(setup::route(), setup::routes())
         .mount(auth::route(), auth::routes())
 }
@@ -34,7 +34,7 @@ use rocket::{CORS, OPTIONS};
 #[launch]
 async fn server() -> _ {
     let mongodb = MongoDB::build();
-    let jwt = JWT::setup().await;
+    let jwt = JWT::setup();
 
     Rocket::build()
         // CORS only for debug use
@@ -42,7 +42,7 @@ async fn server() -> _ {
         // OPTIONS method only for debug use
         .attach(OPTIONS)
         .manage(mongodb)
-        .manage(jwt)
+        .manage(jwt.await)
         .mount(setup::route(), setup::routes())
         .mount(auth::route(), auth::routes())
 }
