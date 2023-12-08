@@ -2,7 +2,7 @@
 extern crate rocket as Rocket;
 
 mod mongodb;
-use mongodb::Mongodb;
+use mongodb::MongoDB;
 
 mod jwt;
 use jwt::JWT;
@@ -15,7 +15,7 @@ use api::{setup, auth};
 #[cfg(not(debug_assertions))]
 #[launch]
 async fn server() -> _ {
-    let mongodb = Mongodb::connect().await;
+    let mongodb = MongoDB::connect().await;
     let jwt = JWT::setup().await;
 
     Rocket::build()
@@ -33,7 +33,7 @@ use rocket::{CORS, OPTIONS};
 #[cfg(debug_assertions)]
 #[launch]
 async fn server() -> _ {
-    let mongodb = Mongodb::connect().await;
+    let mongodb = MongoDB::connect();
     let jwt = JWT::setup().await;
 
     Rocket::build()

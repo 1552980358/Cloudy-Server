@@ -2,6 +2,7 @@ use mongodb::bson::serde_helpers::{
     serialize_hex_string_as_object_id,
     deserialize_hex_string_from_object_id
 };
+use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
 use crate::mongodb::object_id::object_new_hex;
@@ -13,6 +14,7 @@ pub use login::Login;
 #[path = "account/account-find-owner.rs"]
 mod find_owner;
 pub use find_owner::FindOwner;
+use crate::mongodb::{collection, MongoDB};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
@@ -49,12 +51,19 @@ pub enum Role {
 
 }
 
+pub trait AccountCollection {
+    fn account(&self) -> Collection<Account>;
+}
+
+impl AccountCollection for MongoDB {
+    fn account(&self) -> Collection<Account> {
+        self.collection()
+    }
+}
+
 const COLLECTION_ACCOUNT: &str = "account";
-
-impl Account {
-
-    pub fn name<'a>() -> &'a str {
+impl collection::Collection for Account {
+    fn name<'a>() -> &'a str {
         COLLECTION_ACCOUNT
     }
-
 }

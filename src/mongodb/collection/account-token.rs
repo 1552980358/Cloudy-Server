@@ -3,17 +3,16 @@ use mongodb::bson::serde_helpers::{
     serialize_hex_string_as_object_id,
     deserialize_hex_string_from_object_id
 };
+use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
-use crate::mongodb::collections::Account;
-
-#[path = "account-token/account-token-find-account.rs"]
-mod find_account;
-pub use find_account::FindAccount;
+use crate::mongodb::collection::Account;
 
 #[path = "account-token/account-token-register.rs"]
 mod register;
 pub use register::Register;
+
+use crate::mongodb::{collection, MongoDB};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountToken {
@@ -35,13 +34,7 @@ pub struct AccountToken {
 
 }
 
-const COLLECTION_ACCOUNT_TOKEN: &str = "account-token";
-
 impl AccountToken {
-
-    pub fn name<'a>() -> &'a str {
-        COLLECTION_ACCOUNT_TOKEN
-    }
 
     pub fn new(account: Account, issue: usize, duration: usize) -> Self {
         let id = ObjectId::new().to_hex();
@@ -58,4 +51,20 @@ impl AccountToken {
         }
     }
 
+}
+
+pub trait AccountTokenCollection {
+    fn account_token(&self) -> Collection<AccountToken>;
+}
+impl AccountTokenCollection for MongoDB {
+    fn account_token(&self) -> Collection<AccountToken> {
+        self.collection()
+    }
+}
+
+const COLLECTION_ACCOUNT_TOKEN: &str = "account-token";
+impl collection::Collection for AccountToken {
+    fn name<'a>() -> &'a str {
+        COLLECTION_ACCOUNT_TOKEN
+    }
 }

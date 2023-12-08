@@ -4,9 +4,10 @@ use rocket::http::Status;
 use serde::{Deserialize};
 
 use crate::jwt::JWT;
-use crate::mongodb::{ Mongodb, collections::account::Login };
-use crate::mongodb::collections::{Account, AccountToken};
-use crate::mongodb::collections::account_token::Register;
+use crate::mongodb::{MongoDB, collection::account::Login };
+use crate::mongodb::collection::{Account, AccountToken};
+use crate::mongodb::collection::account::AccountCollection;
+use crate::mongodb::collection::account_token::{AccountTokenCollection, Register};
 
 #[path = "auth-post-request.rs"]
 mod request;
@@ -21,7 +22,7 @@ const DURATION_DEFAULT: usize = 604800000usize;
 
 #[post("/?<duration>", data = "<auth_request_body>")]
 pub async fn post(
-    mongodb: &State<Mongodb>,
+    mongodb: &State<MongoDB>,
     jwt: &State<JWT>,
     duration: Option<usize>,
     auth_request_body: AuthRequestBody
@@ -47,8 +48,10 @@ pub async fn post(
         .unwrap_or_else(|| Err(Status::InternalServerError))
 }
 
-async fn login(mongodb: &Mongodb, auth_request_body: AuthRequestBody) -> Option<Account> {
-    mongodb.account.login(auth_request_body.username, auth_request_body.password).await
+async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<Account> {
+    mongodb.account()
+        .login(auth_request_body.username, auth_request_body.password)
+        .await
         .ok()
         .flatten()
 }
@@ -62,9 +65,9 @@ fn time_millis() -> Option<usize> {
 }
 
 async fn register_token(
-    mongodb: &Mongodb, account: Account, issue: usize, duration: usize
+    mongodb: &MongoDB, account: Account, issue: usize, duration: usize
 ) -> Option<AccountToken> {
-    mongodb.account_token
+    mongodb.account_token()
         .register(account, issue, duration)
         .await
 }

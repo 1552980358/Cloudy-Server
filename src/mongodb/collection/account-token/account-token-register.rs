@@ -1,5 +1,5 @@
 use mongodb::Collection;
-use crate::mongodb::collections::{Account, AccountToken};
+use crate::mongodb::collection::{Account, AccountToken};
 
 #[async_trait]
 pub trait Register {

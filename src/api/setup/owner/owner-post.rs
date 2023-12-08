@@ -3,28 +3,30 @@ use Rocket::http::{Status};
 use Rocket::{Data, Request, State};
 
 use crate::jwt::JWT;
-use crate::mongodb::collections::Account;
-use crate::mongodb::collections::account::FindOwner;
-use crate::mongodb::Mongodb;
+use crate::mongodb::collection::Account;
+use crate::mongodb::collection::account::{AccountCollection, FindOwner};
+use crate::mongodb::MongoDB;
 use crate::rocket::{PostData, RequestHeader};
 
 pub struct OwnerRequestBody(Account);
 
 #[post("/owner?<secret>", data = "<owner_request_body>")]
 pub async fn post(
-    jwt: &State<JWT>, mongodb: &State<Mongodb>, secret: String, owner_request_body: OwnerRequestBody
+    jwt: &State<JWT>, mongodb: &State<MongoDB>, secret: String, owner_request_body: OwnerRequestBody
 ) -> Result<Status, Status> {
     if jwt.secret != secret {
         return Err(Status::Unauthorized);
     }
 
+    let account_collection = mongodb.account();
+
     // If owner set, a new owner is not allowed to configure
-    if mongodb.account.find_owner().await {
+    if account_collection.find_owner().await {
         return Err(Status::Forbidden);
     }
 
     let account = owner_request_body.0;
-    let insert = mongodb.account.insert_one(&account, None).await;
+    let insert = account_collection.insert_one(&account, None).await;
     let is_object_id_valid = insert.map(|insert| insert.inserted_id)
         .map(|inserted_id| inserted_id.as_object_id())
         .ok()

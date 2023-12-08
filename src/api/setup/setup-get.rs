@@ -4,7 +4,8 @@ use rocket::State;
 use serde::Serialize;
 
 use crate::jwt::JWT;
-use crate::mongodb::{Mongodb, collections::account::FindOwner};
+use crate::mongodb::{MongoDB, collection::account::FindOwner};
+use crate::mongodb::collection::account::AccountCollection;
 
 #[derive(Serialize, Debug)]
 pub struct SetupResponse {
@@ -13,13 +14,13 @@ pub struct SetupResponse {
 
 #[get("/?<secret>")]
 pub async fn get(
-    jwt: &State<JWT>, mongodb: &State<Mongodb>, secret: String
+    jwt: &State<JWT>, mongodb: &State<MongoDB>, secret: String
 ) -> Result<Json<SetupResponse>, Status> {
     if jwt.secret != secret {
         return Err(Status::Unauthorized);
     }
 
-    let has_owner = mongodb.account.find_owner().await;
+    let has_owner = mongodb.account().find_owner().await;
     let setup_response = SetupResponse {
         has_owner
     };

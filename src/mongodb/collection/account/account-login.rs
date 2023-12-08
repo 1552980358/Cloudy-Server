@@ -1,6 +1,6 @@
 use mongodb::bson::doc;
 use mongodb::Collection;
-use crate::mongodb::collections::Account;
+use crate::mongodb::collection::Account;
 
 type LoginResult = mongodb::error::Result<Option<Account>>;
 

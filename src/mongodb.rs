@@ -1,17 +1,15 @@
 use std::fmt::Display;
-use mongodb::Collection;
+use mongodb::{Collection, Database};
 
 #[path = "mongodb/mongodb-env.rs"]
 mod env;
-#[path = "mongodb/mongodb-connect.rs"]
-mod connect;
+#[path = "mongodb/mongodb-build.rs"]
+mod build;
 
-pub mod collections;
+pub mod collection;
 
 #[path = "mongodb/mongodb-object-id.rs"]
 mod object_id;
-
-use collections::{Account, AccountToken};
 
 const PANIC: &str = "Mongodb Panic: ";
 fn self_panic<M: Display>(message: M) -> ! {
@@ -19,26 +17,24 @@ fn self_panic<M: Display>(message: M) -> ! {
 }
 
 /**
- * [Mongodb]
+ * [MongoDB]
  **/
-pub struct Mongodb {
+pub struct MongoDB {
 
-    pub account: Collection<Account>,
-
-    pub account_token: Collection<AccountToken>,
+    database: Database,
 
 }
 
-impl Mongodb {
+impl MongoDB {
 
     fn new(
-        account: Collection<Account>,
-        account_token: Collection<AccountToken>,
+        database: Database
     ) -> Self {
-        Self {
-            account,
-            account_token
-        }
+        Self { database }
+    }
+
+    pub fn collection<C: collection::Collection>(&self) -> Collection<C> {
+        self.database.collection::<C>(C::name())
     }
 
 }

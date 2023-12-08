@@ -1,7 +1,7 @@
 use mongodb::bson::{doc, to_bson};
 use mongodb::Collection;
 
-use crate::mongodb::collections::{Account, account::Role};
+use crate::mongodb::collection::{Account, account::Role};
 
 #[async_trait]
 pub trait FindOwner {

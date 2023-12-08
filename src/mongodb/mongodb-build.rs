@@ -1,13 +1,12 @@
-use mongodb::{Client, Collection, Database};
+use mongodb::{Client, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
-use crate::mongodb::{Mongodb, self_panic};
-use crate::mongodb::collections::{Account, AccountToken};
+use crate::mongodb::{MongoDB, self_panic};
 use crate::mongodb::env;
 
-impl Mongodb {
+impl MongoDB {
 
-    pub async fn connect() -> Self {
+    pub fn connect() -> Self {
         let server_host = env::server_host();
         let server_port = env::server_port();
 
@@ -24,18 +23,14 @@ impl Mongodb {
             credential_source, credential_username, credential_password,
             // Database
             database
-        ).await;
+        );
 
-        let account = account(&database);
-        let account_token = account_token(&database);
-        Mongodb::new(
-            account, account_token
-        )
+        MongoDB::new(database)
     }
 
 }
 
-async fn connect_database(
+fn connect_database(
     server_host: Option<String>,
     server_port: Option<String>,
     credential_source: Option<String>,
@@ -57,9 +52,14 @@ async fn connect_database(
         server_api, server_address, credential
     );
 
-    let client = connect_client(client_options);
+    let client = Client::with_options(client_options)
+        .unwrap_or_else(|err| self_panic(err));
 
-    request_database(client, database)
+    database.map(|database| client.database(&*database))
+        .unwrap_or_else(|| {
+            client.default_database()
+                .unwrap_or_else(|| self_panic("Database not found"))
+        })
 }
 
 const SERVER_ADDRESS_DEFAULT_LOCALHOST: &str = "localhost";
@@ -113,29 +113,4 @@ fn build_client_options(
         .hosts(vec![server_address])
         .credential(credential)
         .build()
-}
-
-fn connect_client(client_options: ClientOptions) -> Client {
-    Client::with_options(client_options)
-        .unwrap_or_else(|err| self_panic(err))
-}
-
-fn request_database(
-    client: Client, database: Option<String>
-) -> Database {
-    match database {
-        Some(database) => { client.database(&*database) }
-        None => {
-            client.default_database()
-                .unwrap_or_else(|| self_panic("Database not found"))
-        }
-    }
-}
-
-fn account(database: &Database) -> Collection<Account> {
-    database.collection::<Account>(Account::name())
-}
-
-fn account_token(database: &Database) -> Collection<AccountToken> {
-    database.collection::<AccountToken>(AccountToken::name())
 }
