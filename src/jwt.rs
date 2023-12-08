@@ -1,4 +1,3 @@
-use std::fmt::Display;
 use jsonwebtoken::{Algorithm};
 
 #[path = "jwt/jwt-env.rs"]
@@ -15,10 +14,18 @@ mod encode;
 #[path = "jwt/jwt-decode.rs"]
 mod decode;
 
-const PANIC: &str = "JWT Panic: ";
-fn self_panic<M: Display>(message: M) -> ! {
-    panic!("{}{}", PANIC, message)
+#[path = "jwt/jwt-auth.rs"]
+mod auth;
+
+macro_rules! jwt_panic {
+    ($display:expr) => {
+        panic!("JWT Panic: {}", $display)
+    };
+    ($($arg:tt)*) => {
+        panic!("JWT Panic: {}", format!($($arg)*))
+    };
 }
+use jwt_panic;
 
 pub struct JWT {
     pub secret: String,
