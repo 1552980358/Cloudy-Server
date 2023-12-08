@@ -11,6 +11,9 @@ use collection::Collection as MongoDBCollection;
 #[path = "mongodb/mongodb-object-id.rs"]
 mod object_id;
 
+#[path = "mongodb/mongodb-ping.rs"]
+mod ping;
+
 macro_rules! mongodb_panic {
     ($display:expr) => {
         panic!("Mongodb Panic: {}", $display)

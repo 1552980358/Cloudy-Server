@@ -6,7 +6,7 @@ use crate::mongodb::env;
 
 impl MongoDB {
 
-    pub fn build() -> Self {
+    pub async fn build() -> Self {
         let server_host = env::server_host();
         let server_port = env::server_port();
 
@@ -26,6 +26,8 @@ impl MongoDB {
         );
 
         MongoDB::new(database)
+            .ping()
+            .await
     }
 
 }

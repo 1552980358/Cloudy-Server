@@ -19,7 +19,7 @@ async fn server() -> _ {
     let jwt = JWT::setup();
 
     Rocket::build()
-        .manage(mongodb)
+        .manage(mongodb.await)
         .manage(jwt.await)
         .mount(setup::route(), setup::routes())
         .mount(auth::route(), auth::routes())
@@ -41,7 +41,7 @@ async fn server() -> _ {
         .attach(CORS)
         // OPTIONS method only for debug use
         .attach(OPTIONS)
-        .manage(mongodb)
+        .manage(mongodb.await)
         .manage(jwt.await)
         .mount(setup::route(), setup::routes())
         .mount(auth::route(), auth::routes())
