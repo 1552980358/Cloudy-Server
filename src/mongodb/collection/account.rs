@@ -14,7 +14,11 @@ pub use login::Login;
 #[path = "account/account-find-owner.rs"]
 mod find_owner;
 pub use find_owner::FindOwner;
-use crate::mongodb::{collection, MongoDB};
+
+use crate::mongodb::{
+    collection::Collection as MongoDBCollection,
+    MongoDB
+};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
@@ -62,7 +66,7 @@ impl AccountCollection for MongoDB {
 }
 
 const COLLECTION_ACCOUNT: &str = "account";
-impl collection::Collection for Account {
+impl MongoDBCollection for Account {
     fn name<'a>() -> &'a str {
         COLLECTION_ACCOUNT
     }

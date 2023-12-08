@@ -10,7 +10,11 @@ use serde::{Deserialize, Serialize};
 mod register;
 pub use register::Register;
 
-use crate::mongodb::{collection, collection::Account, MongoDB};
+use crate::mongodb::{
+    collection::Collection as MongoDBCollection,
+    collection::Account,
+    MongoDB
+};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountToken {
@@ -61,7 +65,7 @@ impl AccountTokenCollection for MongoDB {
 }
 
 const COLLECTION_ACCOUNT_TOKEN: &str = "account-token";
-impl collection::Collection for AccountToken {
+impl MongoDBCollection for AccountToken {
     fn name<'a>() -> &'a str {
         COLLECTION_ACCOUNT_TOKEN
     }

@@ -7,6 +7,7 @@ mod env;
 mod build;
 
 pub mod collection;
+use collection::Collection as MongoDBCollection;
 
 #[path = "mongodb/mongodb-object-id.rs"]
 mod object_id;
@@ -33,7 +34,7 @@ impl MongoDB {
         Self { database }
     }
 
-    pub fn collection<C: collection::Collection>(&self) -> Collection<C> {
+    pub fn collection<C: MongoDBCollection>(&self) -> Collection<C> {
         self.database.collection::<C>(C::name())
     }
 
