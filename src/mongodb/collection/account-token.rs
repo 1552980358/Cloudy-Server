@@ -6,13 +6,11 @@ use mongodb::bson::serde_helpers::{
 use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
-use crate::mongodb::collection::Account;
-
 #[path = "account-token/account-token-register.rs"]
 mod register;
 pub use register::Register;
 
-use crate::mongodb::{collection, MongoDB};
+use crate::mongodb::{collection, collection::Account, MongoDB};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountToken {
