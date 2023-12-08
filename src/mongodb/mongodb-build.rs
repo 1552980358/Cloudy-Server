@@ -1,7 +1,7 @@
 use mongodb::{Client, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
-use crate::mongodb::{MongoDB, self_panic};
+use crate::mongodb::{MongoDB, mongodb_panic};
 use crate::mongodb::env;
 
 impl MongoDB {
@@ -53,12 +53,12 @@ fn build_database(
     );
 
     let client = Client::with_options(client_options)
-        .unwrap_or_else(|err| self_panic(err));
+        .unwrap_or_else(|err| mongodb_panic!(err));
 
     database.map(|database| client.database(&*database))
         .unwrap_or_else(|| {
             client.default_database()
-                .unwrap_or_else(|| self_panic("Database not found"))
+                .unwrap_or_else(|| mongodb_panic!("Database not found"))
         })
 }
 

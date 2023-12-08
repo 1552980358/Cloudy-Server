@@ -1,4 +1,3 @@
-use std::fmt::Display;
 use mongodb::{Collection, Database};
 
 #[path = "mongodb/mongodb-env.rs"]
@@ -12,10 +11,15 @@ use collection::Collection as MongoDBCollection;
 #[path = "mongodb/mongodb-object-id.rs"]
 mod object_id;
 
-const PANIC: &str = "Mongodb Panic: ";
-fn self_panic<M: Display>(message: M) -> ! {
-    panic!("{}{}", PANIC, message)
+macro_rules! mongodb_panic {
+    ($display:expr) => {
+        panic!("Mongodb Panic: {}", $display)
+    };
+    ($($arg:tt)*) => {
+        panic!("Mongodb Panic: {}", format!($($arg)*))
+    };
 }
+use mongodb_panic;
 
 /**
  * [MongoDB]
