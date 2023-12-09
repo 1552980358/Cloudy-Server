@@ -3,15 +3,23 @@ use Rocket::Request;
 
 pub trait Header {
 
+    fn authorization(&self) -> Option<String>;
+
     fn is_json_content(&self) -> bool;
 
     fn content_length(&self) -> Option<i32>;
 
 }
 
+const HEADER_AUTHORIZATION: &str = "Authorization";
 const HEADER_CONTENT_LENGTH: &str = "Content-Length";
 
 impl Header for Request<'_> {
+
+    fn authorization(&self) -> Option<String> {
+        self.headers().get_one(HEADER_AUTHORIZATION)
+            .map(|authorization| authorization.to_string())
+    }
 
     fn is_json_content(&self) -> bool {
         self.content_type()
