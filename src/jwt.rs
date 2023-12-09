@@ -14,8 +14,9 @@ mod encode;
 #[path = "jwt/jwt-decode.rs"]
 mod decode;
 
-#[path = "jwt/jwt-auth.rs"]
-mod auth;
+#[path = "jwt/jwt-state.rs"]
+mod state;
+pub use state::JWTState;
 
 macro_rules! jwt_panic {
     ($display:expr) => {
