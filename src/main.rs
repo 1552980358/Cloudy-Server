@@ -12,6 +12,8 @@ mod util;
 mod api;
 use api::{setup, auth};
 
+mod rocket;
+
 #[cfg(not(debug_assertions))]
 #[launch]
 async fn server() -> _ {
@@ -25,8 +27,6 @@ async fn server() -> _ {
         .mount(auth::route(), auth::routes())
 }
 
-#[cfg(debug_assertions)]
-mod rocket;
 #[cfg(debug_assertions)]
 use rocket::{CORS, OPTIONS};
 
