@@ -14,6 +14,10 @@ mod object_id;
 #[path = "mongodb/mongodb-ping.rs"]
 mod ping;
 
+#[path = "mongodb/mongodb-state.rs"]
+mod state;
+pub use state::MongoDBState;
+
 macro_rules! mongodb_panic {
     ($display:expr) => {
         panic!("Mongodb Panic: {}", $display)
