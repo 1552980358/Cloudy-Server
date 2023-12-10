@@ -8,6 +8,10 @@ use serde::{Deserialize, Serialize};
 
 #[path = "account-token/account-token-register.rs"]
 mod register;
+
+#[path = "account-token/account-token-field.rs"]
+pub mod field;
+
 pub use register::Register;
 
 use crate::mongodb::{
