@@ -14,6 +14,10 @@ mod encode;
 #[path = "jwt/jwt-decode.rs"]
 mod decode;
 
+#[path = "jwt/jwt-auth.rs"]
+mod auth;
+pub use auth::Auth;
+
 #[path = "jwt/jwt-state.rs"]
 mod state;
 pub use state::JWTState;
