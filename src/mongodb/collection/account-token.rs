@@ -6,6 +6,10 @@ use mongodb::bson::serde_helpers::{
 use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
+#[path = "account-token/account-token-find-account.rs"]
+mod find_account;
+pub use find_account::FindAccount;
+
 #[path = "account-token/account-token-register.rs"]
 mod register;
 
