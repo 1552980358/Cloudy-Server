@@ -10,7 +10,7 @@ use jwt::JWT;
 mod util;
 
 mod api;
-use api::{setup, auth};
+use api::RocketMountApi;
 
 mod rocket;
 
@@ -23,8 +23,7 @@ async fn server() -> _ {
     Rocket::build()
         .manage(mongodb.await)
         .manage(jwt.await)
-        .mount(setup::route(), setup::routes())
-        .mount(auth::route(), auth::routes())
+        .mount_api()
 }
 
 #[cfg(debug_assertions)]
@@ -43,6 +42,5 @@ async fn server() -> _ {
         .attach(OPTIONS)
         .manage(mongodb.await)
         .manage(jwt.await)
-        .mount(setup::route(), setup::routes())
-        .mount(auth::route(), auth::routes())
+        .mount_api()
 }
