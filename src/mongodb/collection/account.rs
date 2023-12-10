@@ -6,6 +6,8 @@ use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
 use crate::mongodb::object_id::object_new_hex;
+use crate::mongodb::collection::Collection as MongoDBCollection;
+use crate::mongodb::MongoDB;
 
 #[path = "account/account-login.rs"]
 mod login;
@@ -15,10 +17,8 @@ pub use login::Login;
 mod find_owner;
 pub use find_owner::FindOwner;
 
-use crate::mongodb::{
-    collection::Collection as MongoDBCollection,
-    MongoDB
-};
+#[path = "account/account-field.rs"]
+pub mod field;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {
