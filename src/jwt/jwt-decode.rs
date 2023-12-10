@@ -1,4 +1,4 @@
-use jsonwebtoken::{Algorithm, DecodingKey, TokenData, Validation};
+use jsonwebtoken::{Algorithm, DecodingKey, Validation};
 
 use crate::jwt::claims::JWTClaims;
 use crate::jwt::JWT;
@@ -25,13 +25,12 @@ impl JWT {
     pub fn decode(
         &self,
         jwt: String
-    ) -> Result<TokenData<JWTClaims>> {
+    ) -> Result<JWTClaims> {
         let decoding_key = self.decoding_key();
         let validation = self.validation();
 
-        jsonwebtoken::decode(
-            &jwt, &decoding_key, &validation
-        )
+        jsonwebtoken::decode(&jwt, &decoding_key, &validation)
+            .map(|token_data| token_data.claims)
     }
 
 }
