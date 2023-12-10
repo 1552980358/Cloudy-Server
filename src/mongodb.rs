@@ -49,4 +49,8 @@ impl MongoDB {
         self.database.collection::<C>(C::name())
     }
 
+    pub fn view<C: MongoDBCollection, D>(&self) -> Collection<D> {
+        self.database.collection::<D>(C::name())
+    }
+
 }
