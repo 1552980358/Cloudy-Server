@@ -17,6 +17,9 @@ pub fn routes() -> Vec<Route> {
         get,
 
         /* /account/<id> */
-        id::get
+        id::get,
+
+        /* /account/<id>/avatar */
+        id::avatar::get
     ]
 }

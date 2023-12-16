@@ -1,0 +1,66 @@
+use base64::Engine;
+use base64::engine::general_purpose::STANDARD as StandardBase64;
+use mongodb::bson::doc;
+use mongodb::bson::oid::ObjectId;
+use mongodb::options::FindOneOptions;
+use Rocket::http::{ContentType, Status};
+use Rocket::State;
+use serde::Deserialize;
+
+use crate::mongodb::collection::Account;
+use crate::mongodb::collection::account::field as AccountField;
+use crate::mongodb::MongoDB;
+
+#[derive(Deserialize, Debug)]
+struct AvatarView {
+    pub avatar: String
+}
+
+#[get("/<id>/avatar")]
+pub async fn get(
+    mongodb: &State<MongoDB>, id: &str
+) -> Result<(ContentType, Vec<u8>), Status> {
+    let object_id = ObjectId::parse_str(id)
+        .map_err(|_| Status::InternalServerError)?;
+    let filter = doc! {
+        AccountField::id(): object_id,
+    };
+    let projection = doc! {
+        AccountField::id(): 0,
+        AccountField::avatar(): 1,
+    };
+    let find_one_option = FindOneOptions::builder()
+        .projection(projection)
+        .build();
+
+    let avatar = mongodb.view::<Account, AvatarView>()
+        .find_one(filter, find_one_option)
+        .await
+        .map_err(|_| Status::InternalServerError)?
+        .ok_or_else(|| Status::NotFound)?
+        .avatar;
+
+    let avatar = handle_avatar_type(avatar).ok_or_else(|| Status::NotFound)?;
+
+    StandardBase64.decode(avatar.1)
+        .map(|bytes| (avatar.0, bytes))
+        .map_err(|_| Status::InternalServerError)
+}
+
+const PREFIX_JPEG: &str = "data:image/jpeg;base64,";
+const PREFIX_PNG: &str = "data:image/png;base64,";
+fn handle_avatar_type(avatar: String) -> Option<(ContentType, String)> {
+    if avatar.starts_with(PREFIX_JPEG) {
+        let avatar_base64 = avatar_split_prefix(&avatar, PREFIX_JPEG);
+        return Some((ContentType::JPEG, avatar_base64))
+    }
+    if avatar.starts_with(PREFIX_PNG) {
+        let avatar_base64 = avatar_split_prefix(&avatar, PREFIX_PNG);
+        return Some((ContentType::PNG, avatar_base64))
+    }
+    None
+}
+
+fn avatar_split_prefix(avatar: &String, prefix: &str) -> String {
+    avatar.as_str()[prefix.len()..].to_string()
+}
