@@ -29,3 +29,6 @@ version = "2.8.0"
 
 [dependencies.jsonwebtoken]
 version = "9.2.0"
+
+[dependencies.base64]
+version = "0.21.5"
