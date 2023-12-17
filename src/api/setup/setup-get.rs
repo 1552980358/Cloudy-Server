@@ -20,9 +20,9 @@ pub async fn get(
         return Err(Status::Unauthorized);
     }
 
-    let has_owner = mongodb.account().find_owner().await;
-    let setup_response = SetupResponse {
-        has_owner
-    };
+    let has_owner = mongodb.account()
+        .has_owner()
+        .await;
+    let setup_response = SetupResponse { has_owner };
     Ok(Json(setup_response))
 }
