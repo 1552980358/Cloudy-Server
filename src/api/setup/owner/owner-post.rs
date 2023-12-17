@@ -21,7 +21,7 @@ pub async fn post(
     let account_collection = mongodb.account();
 
     // If owner set, a new owner is not allowed to configure
-    if account_collection.find_owner().await {
+    if account_collection.has_owner().await {
         return Err(Status::Forbidden);
     }
 
