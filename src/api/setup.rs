@@ -17,6 +17,7 @@ pub fn routes() -> Vec<Route> {
         get,
 
         /* /setup/owner */
-        owner::post
+        owner::get,
+        owner::post,
     ]
 }
