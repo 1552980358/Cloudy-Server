@@ -1,3 +1,4 @@
+use jsonwebtoken::errors::ErrorKind;
 use rocket::http::Status;
 use Rocket::outcome::IntoOutcome;
 use rocket::Request;
@@ -14,6 +15,7 @@ pub struct Auth(pub String);
 pub enum AuthError {
     MissingAuthorization,
     InvalidFormat,
+    Expired,
     InternalError,
     Unauthorized
 }
@@ -43,10 +45,16 @@ impl<'r> FromRequest<'r> for Auth {
                 (Status::InternalServerError, AuthError::InternalError)
             )
         };
-        let Ok(jwt_claims) = jwt.decode(authorization) else {
-            return Outcome::Error(
-                (Status::Unauthorized, AuthError::InvalidFormat)
-            )
+
+        let jwt_claims = match jwt.decode(authorization) {
+            Ok(jwt_claims) => { jwt_claims }
+            Err(error) => {
+                let auth_error = match error.kind() {
+                    ErrorKind::ExpiredSignature => { AuthError::Expired }
+                    _ => { AuthError::InvalidFormat }
+                };
+                return Outcome::Error((Status::Unauthorized, auth_error))
+            }
         };
 
         let Some(mongodb) = request.mongodb() else {
