@@ -18,7 +18,7 @@ pub struct AuthRequestBody {
     pub password: String,
 }
 
-const DURATION_DEFAULT: usize = 604800000usize;
+const DURATION_DEFAULT: usize = 604800usize;
 
 #[post("/?<duration>", data = "<auth_request_body>")]
 pub async fn post(
@@ -34,7 +34,7 @@ pub async fn post(
 
     // Prepare for register credential
     // Issue time
-    let Some(issue) = time_millis() else {
+    let Some(issue) = time_secs() else {
         return Err(Status::InternalServerError);
     };
     let duration = duration.unwrap_or_else(|| DURATION_DEFAULT);
@@ -43,9 +43,7 @@ pub async fn post(
     let Some(account_token) = register_token(mongodb, account, issue, duration).await else {
         return Err(Status::InternalServerError);
     };
-    jwt_encode(jwt, account_token)
-        .map(|jwt| Ok(jwt))
-        .unwrap_or_else(|| Err(Status::InternalServerError))
+    jwt_encode(jwt, account_token).ok_or_else(|_| Status::InternalServerError)
 }
 
 async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<Account> {
@@ -56,11 +54,11 @@ async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<
         .flatten()
 }
 
-fn time_millis() -> Option<usize> {
+fn time_secs() -> Option<usize> {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .map(|duration| duration.as_millis())
-        .map(|time_millis| time_millis as usize)
+        .map(|duration| duration.as_secs())
+        .map(|time_secs| time_secs as usize)
         .ok()
 }
 
