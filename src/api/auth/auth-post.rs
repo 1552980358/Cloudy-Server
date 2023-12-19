@@ -43,7 +43,7 @@ pub async fn post(
     let Some(account_token) = register_token(mongodb, account, issue, duration).await else {
         return Err(Status::InternalServerError);
     };
-    jwt_encode(jwt, account_token).ok_or_else(|_| Status::InternalServerError)
+    jwt_encode(jwt, account_token).ok_or_else(|| Status::InternalServerError)
 }
 
 async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<Account> {
