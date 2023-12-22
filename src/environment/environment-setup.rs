@@ -12,7 +12,7 @@ impl Environment {
         }
     }
 
-    pub async fn setup() -> Self {
+    pub fn setup() -> Self {
         // Collect and filter
         let environment_variables = std::env::vars()
             .collect::<Vec<(String, String)>>();
@@ -26,10 +26,7 @@ impl Environment {
         // Set to Environment
         let mut environment = Environment::new();
         for variable in cloudy_variables {
-            /**
-             * "CLOUDY_SCHEME_FIELD" ->
-             * "SCHEME_FIELD"
-             **/
+            // "CLOUDY_SCHEME_FIELD" -> "SCHEME_FIELD"
             let key = variable.0[prefix_length..].to_string();
             let value = variable.1;
             environment.variables.insert(key, value);
