@@ -13,7 +13,7 @@ use crate::mongodb::MongoDB;
 
 #[derive(Deserialize, Debug)]
 struct AvatarView {
-    pub avatar: String
+    pub avatar: Option<String>
 }
 
 #[get("/<id>/avatar")]
@@ -37,13 +37,15 @@ pub async fn get(
         .find_one(filter, find_one_option)
         .await
         .map_err(|_| Status::InternalServerError)?
-        .ok_or_else(|| Status::NotFound)?
-        .avatar;
+        .map(|avatar_view| avatar_view.avatar)
+        .flatten()
+        .ok_or_else(|| Status::NotFound)?;
 
     let avatar = handle_avatar_type(avatar).ok_or_else(|| Status::NotFound)?;
-
-    StandardBase64.decode(avatar.1)
-        .map(|bytes| (avatar.0, bytes))
+    let avatar_base64 = avatar.1;
+    let avatar_type = avatar.0;
+    StandardBase64.decode(avatar_base64)
+        .map(|bytes| (avatar_type, bytes))
         .map_err(|_| Status::InternalServerError)
 }
 
