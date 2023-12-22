@@ -14,6 +14,8 @@ use api::RocketMountApi;
 
 mod rocket;
 
+mod environment;
+
 #[cfg(not(debug_assertions))]
 #[launch]
 async fn server() -> _ {
