@@ -20,11 +20,6 @@ impl Environment {
         format!("{}{}{}", scheme, Environment::divider(), field)
     }
 
-    pub fn exists(&self, scheme: &str, field: &str) -> bool {
-        let key = Environment::key(scheme, field);
-        self.variables.contains_key(&key)
-    }
-
     pub fn variable(&self, scheme: &str, field: &str) -> Option<String> {
         let key = Environment::key(scheme, field);
         self.variables.get(&key)
