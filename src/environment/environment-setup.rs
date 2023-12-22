@@ -18,7 +18,7 @@ impl Environment {
             .collect::<Vec<(String, String)>>();
         let cloudy_variables = environment_variables.into_iter()
             // Filter all variables starting with `CLOUDY_`
-            .filter(|(key, value)| key.starts_with(ENVIRONMENT_PREFIX))
+            .filter(|(key, _)| key.starts_with(ENVIRONMENT_PREFIX))
             .collect::<Vec<(String, String)>>();
 
         // Length of prefix
