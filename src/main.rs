@@ -15,14 +15,17 @@ use api::RocketMountApi;
 mod rocket;
 
 mod environment;
+use environment::Environment;
 
 #[cfg(not(debug_assertions))]
 #[launch]
 async fn server() -> _ {
+    let environment = Environment::setup();
     let mongodb = MongoDB::build();
     let jwt = JWT::setup();
 
     Rocket::build()
+        .manage(environment.await)
         .manage(mongodb.await)
         .manage(jwt.await)
         .mount_api()
@@ -34,6 +37,7 @@ use rocket::{CORS, OPTIONS};
 #[cfg(debug_assertions)]
 #[launch]
 async fn server() -> _ {
+    let environment = Environment::setup();
     let mongodb = MongoDB::build();
     let jwt = JWT::setup();
 
@@ -42,6 +46,7 @@ async fn server() -> _ {
         .attach(CORS)
         // OPTIONS method only for debug use
         .attach(OPTIONS)
+        .manage(environment.await)
         .manage(mongodb.await)
         .manage(jwt.await)
         .mount_api()
