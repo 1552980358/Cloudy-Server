@@ -33,7 +33,7 @@ macro_rules! jwt_panic {
 use jwt_panic;
 
 pub struct JWT {
-    pub secret: String,
+    secret: String,
     algorithm: Algorithm,
 }
 
