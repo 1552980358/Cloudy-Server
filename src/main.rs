@@ -7,8 +7,6 @@ use mongodb::MongoDB;
 mod jwt;
 use jwt::JWT;
 
-mod util;
-
 mod api;
 use api::RocketMountApi;
 
