@@ -3,7 +3,8 @@ use rocket::serde::json::Json;
 use rocket::State;
 use serde::Serialize;
 
-use crate::jwt::JWT;
+use crate::api::setup::SetupEnvironment;
+use crate::environment::Environment;
 use crate::mongodb::{MongoDB, collection::account::FindOwner};
 use crate::mongodb::collection::account::AccountCollection;
 
@@ -14,10 +15,10 @@ pub struct SetupResponse {
 
 #[get("/?<secret>")]
 pub async fn get(
-    jwt: &State<JWT>, mongodb: &State<MongoDB>, secret: String
+    environment: &State<Environment>, mongodb: &State<MongoDB>, secret: String
 ) -> Result<Json<SetupResponse>, Status> {
-    if jwt.secret != secret {
-        return Err(Status::Unauthorized);
+    if !environment.setup_secret_validation(secret) {
+        return Err(Status::Unauthorized)
     }
 
     let has_owner = mongodb.account()

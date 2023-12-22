@@ -2,7 +2,8 @@ use Rocket::data::{FromData, Outcome};
 use Rocket::http::{Status};
 use Rocket::{Data, Request, State};
 
-use crate::jwt::JWT;
+use crate::api::setup::SetupEnvironment;
+use crate::environment::Environment;
 use crate::mongodb::collection::Account;
 use crate::mongodb::collection::account::{AccountCollection, FindOwner};
 use crate::mongodb::MongoDB;
@@ -12,10 +13,13 @@ pub struct OwnerRequestBody(Account);
 
 #[post("/owner?<secret>", data = "<owner_request_body>")]
 pub async fn post(
-    jwt: &State<JWT>, mongodb: &State<MongoDB>, secret: String, owner_request_body: OwnerRequestBody
+    environment: &State<Environment>,
+    mongodb: &State<MongoDB>,
+    secret: String,
+    owner_request_body: OwnerRequestBody
 ) -> Result<Status, Status> {
-    if jwt.secret != secret {
-        return Err(Status::Unauthorized);
+    if !environment.setup_secret_validation(secret) {
+        return Err(Status::Unauthorized)
     }
 
     let account_collection = mongodb.account();
