@@ -1,16 +1,16 @@
 use std::str::FromStr;
 use jsonwebtoken::Algorithm;
 
+use crate::environment::Environment;
+
 use crate::jwt::JWT;
-use crate::jwt::env;
+use crate::jwt::environment::JWTEnvironment;
 
 impl JWT {
 
-    pub async fn setup() -> Self {
-        let secret = env::secret();
-
-        let algorithm = env::algorithm();
-        let algorithm = jwt_algorithm(algorithm);
+    pub fn setup(environment: &Environment) -> Self {
+        let secret = environment.jwt_secret();
+        let algorithm = jwt_algorithm(environment.jwt_algorithm());
 
         JWT::new(secret, algorithm)
     }

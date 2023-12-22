@@ -21,13 +21,16 @@ use environment::Environment;
 #[launch]
 async fn server() -> _ {
     let environment = Environment::setup();
-    let mongodb = MongoDB::build();
-    let jwt = JWT::setup();
+    let mongodb = MongoDB::setup(&environment);
+    let jwt = JWT::setup(&environment);
+
+    // Have a ping test first
+    let _ = mongodb.ping().await;
 
     Rocket::build()
-        .manage(environment.await)
-        .manage(mongodb.await)
-        .manage(jwt.await)
+        .manage(environment)
+        .manage(mongodb)
+        .manage(jwt)
         .mount_api()
 }
 
@@ -38,16 +41,19 @@ use rocket::{CORS, OPTIONS};
 #[launch]
 async fn server() -> _ {
     let environment = Environment::setup();
-    let mongodb = MongoDB::build();
-    let jwt = JWT::setup();
+    let mongodb = MongoDB::setup(&environment);
+    let jwt = JWT::setup(&environment);
+
+    // Have a ping test first
+    let _ = mongodb.ping().await;
 
     Rocket::build()
         // CORS only for debug use
         .attach(CORS)
         // OPTIONS method only for debug use
         .attach(OPTIONS)
-        .manage(environment.await)
-        .manage(mongodb.await)
-        .manage(jwt.await)
+        .manage(environment)
+        .manage(mongodb)
+        .manage(jwt)
         .mount_api()
 }

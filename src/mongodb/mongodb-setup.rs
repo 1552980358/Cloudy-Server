@@ -1,20 +1,22 @@
 use mongodb::{Client, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
+use crate::environment::Environment;
+
 use crate::mongodb::{MongoDB, mongodb_panic};
-use crate::mongodb::env;
+use crate::mongodb::environment::MongoDBEnvironment;
 
 impl MongoDB {
 
-    pub async fn build() -> Self {
-        let server_host = env::server_host();
-        let server_port = env::server_port();
+    pub fn setup(environment: &Environment) -> Self {
+        let server_host = environment.mongodb_host();
+        let server_port = environment.mongodb_port();
 
-        let credential_source = env::credential_source();
-        let credential_username = env::credential_username();
-        let credential_password = env::credential_password();
+        let credential_source = environment.mongodb_source();
+        let credential_username = environment.mongodb_username();
+        let credential_password = environment.mongodb_password();
 
-        let database = env::database();
+        let database = environment.mongodb_database();
 
         let database = build_database(
             // Server Address
@@ -26,8 +28,6 @@ impl MongoDB {
         );
 
         MongoDB::new(database)
-            .ping()
-            .await
     }
 
 }

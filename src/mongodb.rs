@@ -1,9 +1,10 @@
 use mongodb::{Collection, Database};
 
-#[path = "mongodb/mongodb-env.rs"]
-mod env;
-#[path = "mongodb/mongodb-build.rs"]
-mod build;
+#[path = "mongodb/mongodb-environment.rs"]
+mod environment;
+
+#[path = "mongodb/mongodb-setup.rs"]
+mod setup;
 
 pub mod collection;
 use collection::Collection as MongoDBCollection;

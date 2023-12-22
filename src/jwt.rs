@@ -1,7 +1,7 @@
 use jsonwebtoken::{Algorithm};
 
-#[path = "jwt/jwt-env.rs"]
-mod env;
+#[path = "jwt/jwt-environment.rs"]
+mod environment;
 
 #[path = "jwt/jwt-setup.rs"]
 mod setup;
