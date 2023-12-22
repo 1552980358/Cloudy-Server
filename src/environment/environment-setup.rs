@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-use crate::environment::{Environment, ENVIRONMENT_PREFIX};
+use crate::environment::Environment;
+
+const ENVIRONMENT_PREFIX: &str = "CLOUDY_";
 
 impl Environment {
 

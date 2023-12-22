@@ -8,7 +8,6 @@ pub struct Environment {
 }
 
 const ENVIRONMENT_DIVIDER: &str = "_";
-const ENVIRONMENT_PREFIX: &str = "CLOUDY_";
 
 impl Environment {
 
