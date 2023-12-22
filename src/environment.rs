@@ -7,19 +7,16 @@ pub struct Environment {
     variables: HashMap<String, String>,
 }
 
-const ENVIRONMENT_DIVIDER: &str = "_";
+const ENVIRONMENT_DIVIDER: char = '_';
 
 impl Environment {
 
-    fn divider<'a>() -> &'a str {
+    fn divider() -> char {
         ENVIRONMENT_DIVIDER
     }
 
     fn key(scheme: &str, field: &str) -> String {
-        /**
-         * [scheme], [field] ->
-         * "<SCHEME>_<FIELD>"
-         **/
+        // [scheme], [field] -> "<SCHEME>_<FIELD>"
         format!("{}{}{}", scheme, Environment::divider(), field)
     }
 
