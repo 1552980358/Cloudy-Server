@@ -29,12 +29,13 @@ pub struct AccountMetadata {
 
 }
 
-#[get("/<id>")]
+#[get("/<account_id>")]
 pub async fn get(
-    mongodb: &State<MongoDB>, id: String
+    mongodb: &State<MongoDB>, account_id: &str
 ) -> Result<Json<AccountMetadata>, Status> {
-    let object_id = ObjectId::parse_str(id)
-        .map_err(|_| Status::InternalServerError)?;
+    let object_id = ObjectId::parse_str(account_id)
+        .map_err(|_| Status::BadRequest)?;
+
     let filter = doc! {
         AccountField::id(): object_id,
     };

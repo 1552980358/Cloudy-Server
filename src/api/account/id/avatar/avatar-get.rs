@@ -16,11 +16,11 @@ struct AvatarView {
     pub avatar: Option<String>
 }
 
-#[get("/<id>/avatar")]
+#[get("/<account_id>/avatar", rank = 2)]
 pub async fn get(
-    mongodb: &State<MongoDB>, id: &str
+    mongodb: &State<MongoDB>, account_id: &str
 ) -> Result<(ContentType, Vec<u8>), Status> {
-    let object_id = ObjectId::parse_str(id)
+    let object_id = ObjectId::parse_str(account_id)
         .map_err(|_| Status::InternalServerError)?;
     let filter = doc! {
         AccountField::id(): object_id,

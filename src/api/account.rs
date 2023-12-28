@@ -6,6 +6,8 @@ use account_get::get;
 
 mod id;
 
+mod username;
+
 const ROUTE_ACCOUNT: &str = "/account";
 pub fn route<'a>() -> &'a str {
     ROUTE_ACCOUNT
@@ -16,10 +18,12 @@ pub fn routes() -> Vec<Route> {
         /* /account */
         get,
 
-        /* /account/<id> */
+        /* /account/<account_id> */
         id::get,
 
         /* /account/<id>/avatar */
         id::avatar::get
+        /* /account/<account_id>/avatar */
+        id::avatar::get,
     ]
 }
