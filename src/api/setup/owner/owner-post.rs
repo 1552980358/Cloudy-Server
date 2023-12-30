@@ -15,10 +15,12 @@ pub struct OwnerRequestBody(Account);
 pub async fn post(
     environment: &State<Environment>,
     mongodb: &State<MongoDB>,
-    secret: String,
+    secret: &str,
     owner_request_body: OwnerRequestBody
 ) -> Result<Status, Status> {
-    if !environment.setup_secret_validation(secret) {
+    let setup_secret = environment.setup_secret()
+        .ok_or_else(|| Status::MethodNotAllowed)?;
+    if setup_secret.trim().is_empty() || setup_secret.as_str() != secret {
         return Err(Status::Unauthorized)
     }
 

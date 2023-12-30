@@ -15,9 +15,13 @@ pub struct SetupResponse {
 
 #[get("/?<secret>")]
 pub async fn get(
-    environment: &State<Environment>, mongodb: &State<MongoDB>, secret: String
+    environment: &State<Environment>,
+    mongodb: &State<MongoDB>,
+    secret: &str,
 ) -> Result<Json<SetupResponse>, Status> {
-    if !environment.setup_secret_validation(secret) {
+    let setup_secret = environment.setup_secret()
+        .ok_or_else(|| Status::MethodNotAllowed)?;
+    if setup_secret.trim().is_empty() || setup_secret.as_str() != secret {
         return Err(Status::Unauthorized)
     }
 

@@ -35,11 +35,6 @@ pub trait SetupEnvironment {
         self.setup(ENVIRONMENT_SETUP_SECRET)
     }
 
-    fn setup_secret_validation(&self, secret: String) -> bool {
-        self.setup_secret().map(|setup_secret| setup_secret == secret)
-            .unwrap_or_else(|| false)
-    }
-
 }
 
 impl SetupEnvironment for Environment {
