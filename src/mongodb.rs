@@ -19,6 +19,10 @@ mod ping;
 mod state;
 pub use state::MongoDBState;
 
+#[path = "mongodb/mongodb-filter.rs"]
+mod filter;
+pub use filter::Filter;
+
 macro_rules! mongodb_panic {
     ($display:expr) => {
         panic!("Mongodb Panic: {}", $display)
