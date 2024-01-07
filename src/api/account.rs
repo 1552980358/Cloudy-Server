@@ -6,7 +6,7 @@ use account_get::get;
 
 mod id;
 
-mod username;
+mod find;
 
 const ROUTE_ACCOUNT: &str = "/account";
 pub fn route<'a>() -> &'a str {
@@ -24,7 +24,7 @@ pub fn routes() -> Vec<Route> {
         /* /account/<account_id>/avatar */
         id::avatar::get,
 
-        /* /account/username/<username> */
-        username::get,
+        /* /account/find/<account_identifier> */
+        find::get,
     ]
 }
