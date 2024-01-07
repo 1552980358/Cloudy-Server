@@ -10,8 +10,8 @@ opt-level = 0
 
 [profile.release]
 incremental = true
-opt-level = 's'
 lto = true
+opt-level = 's'
 strip = true
 
 # Serde and related
