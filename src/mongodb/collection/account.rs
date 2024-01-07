@@ -30,6 +30,7 @@ pub struct Account {
     pub id: String,
 
     pub username: String,
+    pub email: String,
     pub password: String,
 
     pub nickname: String,

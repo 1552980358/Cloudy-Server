@@ -8,6 +8,11 @@ pub fn username<'a>() -> &'a str {
     FIELD_USERNAME
 }
 
+const FIELD_EMAIL: &str = "email";
+pub fn email<'a>() -> &'a str {
+    FIELD_EMAIL
+}
+
 const FIELD_PASSWORD: &str = "password";
 pub fn password<'a>() -> &'a str {
     FIELD_PASSWORD

@@ -22,6 +22,7 @@ pub struct AccountMetadata {
     pub id: String,
 
     pub username: String,
+    pub email: String,
 
     pub nickname: String,
 
