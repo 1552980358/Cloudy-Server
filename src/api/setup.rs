@@ -4,9 +4,10 @@ use setup_get::get;
 
 mod owner;
 
-use rocket::Route;
+#[path = "setup/setup-environment.rs"]
+mod environment;
 
-use crate::environment::Environment;
+use rocket::Route;
 
 const ROUTE_SETUP: &str = "/setup";
 pub fn route<'a>() -> &'a str {
@@ -22,23 +23,4 @@ pub fn routes() -> Vec<Route> {
         owner::get,
         owner::post,
     ]
-}
-
-const ENVIRONMENT_SETUP: &str = "SETUP";
-const ENVIRONMENT_SETUP_SECRET: &str = "SECRET";
-
-pub trait SetupEnvironment {
-
-    fn setup(&self, field: &str) -> Option<String>;
-
-    fn setup_secret(&self) -> Option<String> {
-        self.setup(ENVIRONMENT_SETUP_SECRET)
-    }
-
-}
-
-impl SetupEnvironment for Environment {
-    fn setup(&self, field: &str) -> Option<String> {
-        self.variable(ENVIRONMENT_SETUP, field)
-    }
 }

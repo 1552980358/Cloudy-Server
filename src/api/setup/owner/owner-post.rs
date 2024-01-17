@@ -2,7 +2,7 @@ use Rocket::data::{FromData, Outcome};
 use Rocket::http::{Status};
 use Rocket::{Data, Request, State};
 
-use crate::api::setup::SetupEnvironment;
+use crate::api::setup::environment::SetupEnvironment;
 use crate::environment::Environment;
 use crate::mongodb::collection::Account;
 use crate::mongodb::collection::account::{AccountCollection, FindOwner};

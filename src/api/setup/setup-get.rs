@@ -3,7 +3,7 @@ use rocket::serde::json::Json;
 use rocket::State;
 use serde::Serialize;
 
-use crate::api::setup::SetupEnvironment;
+use crate::api::setup::environment::SetupEnvironment;
 use crate::environment::Environment;
 use crate::mongodb::{MongoDB, collection::account::FindOwner};
 use crate::mongodb::collection::account::AccountCollection;
