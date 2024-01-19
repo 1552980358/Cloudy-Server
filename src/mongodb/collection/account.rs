@@ -55,13 +55,23 @@ pub enum Role {
 }
 
 pub trait AccountCollection {
+
     fn account(&self) -> Collection<Account>;
+
+    fn account_view<V>(&self) -> Collection<V>;
+
 }
 
 impl AccountCollection for MongoDB {
+
     fn account(&self) -> Collection<Account> {
         self.collection()
     }
+
+    fn account_view<V>(&self) -> Collection<V> {
+        self.view::<Account, V>()
+    }
+
 }
 
 const COLLECTION_ACCOUNT: &str = "account";

@@ -7,8 +7,8 @@ use Rocket::serde::json::Json;
 use Rocket::State;
 use serde::{Deserialize, Serialize};
 
-use crate::mongodb::collection::Account;
 use crate::mongodb::collection::account::{
+    AccountCollection,
     Field as AccountField,
     Role
 };
@@ -53,7 +53,7 @@ pub async fn get_account_metadata(
         .projection(projection)
         .build();
 
-    mongodb.view::<Account, AccountMetadata>()
+    mongodb.account_view::<AccountMetadata>()
         .find_one(filter, find_one_options)
         .await
         .map_err(|_| { Status::InternalServerError })?

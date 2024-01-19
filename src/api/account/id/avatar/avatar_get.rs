@@ -8,7 +8,7 @@ use Rocket::State;
 use serde::Deserialize;
 
 use crate::mongodb::collection::account::{
-    Account,
+    AccountCollection,
     Field as AccountField
 };
 use crate::mongodb::MongoDB;
@@ -35,7 +35,7 @@ pub async fn get_account_avatar(
         .projection(projection)
         .build();
 
-    let avatar = mongodb.view::<Account, AvatarView>()
+    let avatar = mongodb.account_view::<AvatarView>()
         .find_one(filter, find_one_option)
         .await
         .map_err(|_| Status::InternalServerError)?

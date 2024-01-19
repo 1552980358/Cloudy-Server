@@ -7,7 +7,7 @@ use Rocket::State;
 use serde::Deserialize;
 
 use crate::mongodb::collection::account::{
-    Account,
+    AccountCollection,
     Field as AccountField
 };
 
@@ -41,7 +41,7 @@ pub async fn find_account(
         .projection(projection)
         .build();
 
-    mongodb.view::<Account, FindAccountView>()
+    mongodb.account_view::<FindAccountView>()
         .find_one(filter, find_one_options)
         .await
         .map_err(|_| Status::InternalServerError)?
