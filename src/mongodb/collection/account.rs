@@ -9,16 +9,14 @@ use crate::mongodb::object_id::object_new_hex;
 use crate::mongodb::collection::Collection as MongoDBCollection;
 use crate::mongodb::MongoDB;
 
-#[path = "account/account-login.rs"]
-mod login;
-pub use login::Login;
+mod account_login;
+pub use account_login::Login;
 
-#[path = "account/account-find-owner.rs"]
-mod find_owner;
-pub use find_owner::FindOwner;
+mod account_find_owner;
+pub use account_find_owner::FindOwner;
 
-#[path = "account/account-field.rs"]
-pub mod field;
+mod account_field;
+pub use account_field::Field;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Account {

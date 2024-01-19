@@ -7,8 +7,10 @@ use Rocket::http::{ContentType, Status};
 use Rocket::State;
 use serde::Deserialize;
 
-use crate::mongodb::collection::Account;
-use crate::mongodb::collection::account::field as AccountField;
+use crate::mongodb::collection::account::{
+    Account,
+    Field as AccountField
+};
 use crate::mongodb::MongoDB;
 
 #[derive(Deserialize, Debug)]
@@ -17,7 +19,7 @@ struct AvatarView {
 }
 
 #[get("/<account_id>/avatar", rank = 2)]
-pub async fn get(
+pub async fn get_account_avatar(
     mongodb: &State<MongoDB>, account_id: &str
 ) -> Result<(ContentType, Vec<u8>), Status> {
     let object_id = ObjectId::parse_str(account_id)

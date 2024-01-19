@@ -1,4 +1,5 @@
 use mongodb::bson::doc;
+
 use crate::mongodb::{MongoDB, mongodb_panic};
 
 const COMMAND_PING: &str = "ping";

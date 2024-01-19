@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
-#[path = "environment/environment-setup.rs"]
-mod setup;
+mod environment_setup;
 
 pub struct Environment {
     variables: HashMap<String, String>,

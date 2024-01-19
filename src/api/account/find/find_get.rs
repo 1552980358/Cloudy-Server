@@ -8,7 +8,7 @@ use serde::Deserialize;
 
 use crate::mongodb::collection::account::{
     Account,
-    field as AccountField
+    Field as AccountField
 };
 
 use crate::mongodb::{Filter, MongoDB};

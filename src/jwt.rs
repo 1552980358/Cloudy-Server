@@ -1,26 +1,22 @@
 use jsonwebtoken::{Algorithm};
 
-#[path = "jwt/jwt-environment.rs"]
-mod environment;
+mod jwt_environment;
+use jwt_environment::JWTEnvironment;
 
-#[path = "jwt/jwt-setup.rs"]
-mod setup;
+mod jwt_setup;
 
-#[path = "jwt/jwt-claims.rs"]
-mod claims;
+mod jwt_claims;
+use jwt_claims::JWTClaims;
 
-#[path = "jwt/jwt-encode.rs"]
-mod encode;
-#[path = "jwt/jwt-decode.rs"]
-mod decode;
+mod jwt_encode;
 
-#[path = "jwt/jwt-auth.rs"]
-mod auth;
-pub use auth::Auth;
+mod jwt_decode;
 
-#[path = "jwt/jwt-state.rs"]
-mod state;
-pub use state::JWTState;
+mod jwt_auth;
+pub use jwt_auth::Auth;
+
+mod jwt_state;
+pub use jwt_state::JWTState;
 
 macro_rules! jwt_panic {
     ($display:expr) => {

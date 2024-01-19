@@ -1,8 +1,7 @@
 use Rocket::Route;
 
-#[path = "account/account-get.rs"]
 mod account_get;
-use account_get::get;
+use account_get::get_authed_account_metadata as get;
 
 mod id;
 

@@ -3,8 +3,11 @@ use Rocket::serde::json::Json;
 use Rocket::serde::Serialize;
 use Rocket::State;
 
-use crate::mongodb::collection::Account;
-use crate::mongodb::collection::account::{AccountCollection, FindOwner};
+use crate::mongodb::collection::account::{
+    Account,
+    AccountCollection,
+    FindOwner
+};
 use crate::mongodb::MongoDB;
 
 #[derive(Serialize, Debug)]
@@ -25,7 +28,7 @@ impl Response {
 }
 
 #[get("/owner")]
-pub async fn get(mongodb: &State<MongoDB>) -> Result<Json<Response>, Status> {
+pub async fn check_owner_state(mongodb: &State<MongoDB>) -> Result<Json<Response>, Status> {
     mongodb.account()
         .find_owner()
         .await

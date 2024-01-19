@@ -1,27 +1,23 @@
 use mongodb::{Collection, Database};
 
-#[path = "mongodb/mongodb-environment.rs"]
-mod environment;
+mod mongodb_environment;
+use mongodb_environment::MongoDBEnvironment;
 
-#[path = "mongodb/mongodb-setup.rs"]
-mod setup;
+mod mongodb_setup;
 
 pub mod collection;
 use collection::Collection as MongoDBCollection;
 
-#[path = "mongodb/mongodb-object-id.rs"]
-mod object_id;
+mod mongodb_object_id;
+use mongodb_object_id as object_id;
 
-#[path = "mongodb/mongodb-ping.rs"]
-mod ping;
+mod mongodb_ping;
 
-#[path = "mongodb/mongodb-state.rs"]
-mod state;
-pub use state::MongoDBState;
+mod mongodb_state;
+pub use mongodb_state::MongoDBState;
 
-#[path = "mongodb/mongodb-filter.rs"]
-mod filter;
-pub use filter::Filter;
+mod mongodb_filter;
+pub use mongodb_filter::Filter;
 
 macro_rules! mongodb_panic {
     ($display:expr) => {

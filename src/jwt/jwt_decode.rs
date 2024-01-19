@@ -1,6 +1,6 @@
 use jsonwebtoken::{Algorithm, DecodingKey, Validation};
 
-use crate::jwt::claims::JWTClaims;
+use crate::jwt::JWTClaims;
 use crate::jwt::JWT;
 
 type Result<R> = jsonwebtoken::errors::Result<R>;

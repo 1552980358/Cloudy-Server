@@ -3,7 +3,7 @@ use rocket::serde::json::Json;
 use rocket::State;
 use serde::Serialize;
 
-use crate::api::setup::environment::SetupEnvironment;
+use crate::api::setup::SetupEnvironment;
 use crate::environment::Environment;
 use crate::mongodb::{MongoDB, collection::account::FindOwner};
 use crate::mongodb::collection::account::AccountCollection;
@@ -14,7 +14,7 @@ pub struct SetupResponse {
 }
 
 #[get("/?<secret>")]
-pub async fn get(
+pub async fn check_setup_state(
     environment: &State<Environment>,
     mongodb: &State<MongoDB>,
     secret: &str,

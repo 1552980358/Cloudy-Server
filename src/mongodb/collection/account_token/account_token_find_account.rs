@@ -5,7 +5,7 @@ use mongodb::Collection;
 
 use crate::mongodb::collection::account_token::{
     AccountToken,
-    field as AccountTokenField
+    Field as AccountTokenField
 };
 
 type FindAccountResult = Result<Option<String>>;

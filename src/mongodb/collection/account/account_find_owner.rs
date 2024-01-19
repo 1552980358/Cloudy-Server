@@ -3,7 +3,10 @@ use mongodb::Collection;
 use mongodb::error::Result;
 
 use crate::mongodb::collection::Account;
-use crate::mongodb::collection::account::{Role, field as AccountField};
+use crate::mongodb::collection::account::{
+    Field as AccountField,
+    Role
+};
 
 #[async_trait]
 pub trait FindOwner {

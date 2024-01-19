@@ -2,17 +2,20 @@ use Rocket::data::{FromData, Outcome};
 use Rocket::http::{Status};
 use Rocket::{Data, Request, State};
 
-use crate::api::setup::environment::SetupEnvironment;
+use crate::api::setup::SetupEnvironment;
 use crate::environment::Environment;
-use crate::mongodb::collection::Account;
-use crate::mongodb::collection::account::{AccountCollection, FindOwner};
+use crate::mongodb::collection::account::{
+    Account,
+    AccountCollection,
+    FindOwner
+};
 use crate::mongodb::MongoDB;
 use crate::rocket::{PostData, RequestHeader};
 
 pub struct OwnerRequestBody(Account);
 
 #[post("/owner?<secret>", data = "<owner_request_body>")]
-pub async fn post(
+pub async fn setup_owner(
     environment: &State<Environment>,
     mongodb: &State<MongoDB>,
     secret: &str,

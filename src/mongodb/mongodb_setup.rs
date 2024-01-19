@@ -2,9 +2,11 @@ use mongodb::{Client, Database};
 use mongodb::options::{ClientOptions, Credential, ServerAddress, ServerApi, ServerApiVersion};
 
 use crate::environment::Environment;
-
-use crate::mongodb::{MongoDB, mongodb_panic};
-use crate::mongodb::environment::MongoDBEnvironment;
+use crate::mongodb::{
+    mongodb_panic,
+    MongoDB,
+    MongoDBEnvironment
+};
 
 impl MongoDB {
 

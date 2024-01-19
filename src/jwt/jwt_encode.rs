@@ -1,7 +1,7 @@
 use jsonwebtoken::{Algorithm, EncodingKey, Header};
 
 use crate::jwt::JWT;
-use crate::jwt::claims::JWTClaims;
+use crate::jwt::JWTClaims;
 
 type JWTResult = jsonwebtoken::errors::Result<String>;
 

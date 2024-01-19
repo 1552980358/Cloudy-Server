@@ -1,10 +1,5 @@
-#[path = "auth/auth-post.rs"]
 mod auth_post;
-use auth_post::post;
-
-#[path = "auth/auth-get.rs"]
-mod auth_get;
-use auth_get::get;
+use auth_post::login_auth as post;
 
 use rocket::Route;
 
@@ -15,6 +10,6 @@ pub fn route<'a>() -> &'a str {
 
 pub fn routes() -> Vec<Route> {
     routes![
-        get, post,
+        post,
     ]
 }

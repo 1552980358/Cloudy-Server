@@ -6,17 +6,14 @@ use mongodb::bson::serde_helpers::{
 use mongodb::Collection;
 use serde::{Deserialize, Serialize};
 
-#[path = "account-token/account-token-find-account.rs"]
-mod find_account;
-pub use find_account::FindAccount;
+mod account_token_find_account;
+pub use account_token_find_account::FindAccount;
 
-#[path = "account-token/account-token-register.rs"]
-mod register;
+mod account_token_field;
+pub use account_token_field::Field;
 
-#[path = "account-token/account-token-field.rs"]
-pub mod field;
-
-pub use register::Register;
+mod account_token_register;
+pub use account_token_register::Register;
 
 use crate::mongodb::{
     collection::Collection as MongoDBCollection,

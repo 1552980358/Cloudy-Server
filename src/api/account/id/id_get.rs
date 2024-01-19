@@ -8,7 +8,10 @@ use Rocket::State;
 use serde::{Deserialize, Serialize};
 
 use crate::mongodb::collection::Account;
-use crate::mongodb::collection::account::{Role, field as AccountField};
+use crate::mongodb::collection::account::{
+    Field as AccountField,
+    Role
+};
 
 use crate::mongodb::MongoDB;
 
@@ -31,7 +34,7 @@ pub struct AccountMetadata {
 }
 
 #[get("/<account_id>")]
-pub async fn get(
+pub async fn get_account_metadata(
     mongodb: &State<MongoDB>, account_id: &str
 ) -> Result<Json<AccountMetadata>, Status> {
     let object_id = ObjectId::parse_str(account_id)

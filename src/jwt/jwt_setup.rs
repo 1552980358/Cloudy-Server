@@ -3,8 +3,10 @@ use jsonwebtoken::Algorithm;
 
 use crate::environment::Environment;
 
-use crate::jwt::JWT;
-use crate::jwt::environment::JWTEnvironment;
+use crate::jwt::{
+    JWT,
+    JWTEnvironment
+};
 
 impl JWT {
 
