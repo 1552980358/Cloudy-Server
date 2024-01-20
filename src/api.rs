@@ -1,10 +1,20 @@
 use rocket::{Build, Rocket};
 
+mod account;
+
 mod auth;
 
 mod setup;
 
-mod account;
+macro_rules! api_panic {
+    ($display:expr) => {
+        panic!("API Panic: {}", $display)
+    };
+    ($($arg:tt)*) => {
+        panic!("API Panic: {}", format!($($arg)*))
+    };
+}
+use api_panic;
 
 pub trait RocketMountApi {
     fn mount_api(self) -> Self;
