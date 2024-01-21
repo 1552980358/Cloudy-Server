@@ -34,7 +34,6 @@ pub struct AccountToken {
     pub account: String,
 
     pub issue: usize,
-    pub duration: usize,
     pub expiry: usize,
 
     pub valid: bool,
@@ -46,14 +45,12 @@ impl AccountToken {
     pub fn new(account: Account, issue: usize, duration: usize) -> Self {
         let id = ObjectId::new().to_hex();
         let account = account.id;
-        let expiry = issue + duration;
 
         Self {
             id,
             account,
             issue,
-            duration,
-            expiry,
+            expiry: issue + duration,
             valid: true
         }
     }
