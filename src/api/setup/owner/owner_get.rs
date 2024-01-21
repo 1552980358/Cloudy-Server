@@ -27,7 +27,7 @@ impl Response {
     }
 }
 
-#[get("/owner")]
+#[get("/")]
 pub async fn check_owner_state(mongodb: &State<MongoDB>) -> Result<Json<Response>, Status> {
     mongodb.account()
         .find_owner()

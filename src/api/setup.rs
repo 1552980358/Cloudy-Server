@@ -14,12 +14,11 @@ pub fn route<'a>() -> &'a str {
 }
 
 pub fn routes() -> Vec<Route> {
-    routes![
+    vec![
         /* /setup */
-        get,
+        routes![get],
 
         /* /setup/owner */
-        owner::get,
-        owner::post,
-    ]
+        owner::routes()
+    ].concat()
 }

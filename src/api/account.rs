@@ -13,17 +13,12 @@ pub fn route<'a>() -> &'a str {
 }
 
 pub fn routes() -> Vec<Route> {
-    routes![
+    vec![
         /* /account */
-        get,
-
+        routes![get],
         /* /account/<account_id> */
-        id::get,
-
-        /* /account/<account_id>/avatar */
-        id::avatar::get,
-
-        /* /account/find/<account_identifier> */
-        find::get,
-    ]
+        id::routes(),
+        /* /account/find */
+        find::routes()
+    ].concat()
 }

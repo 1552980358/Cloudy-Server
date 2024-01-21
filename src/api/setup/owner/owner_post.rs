@@ -14,7 +14,7 @@ use crate::rocket::{PostData, RequestHeader};
 
 pub struct OwnerRequestBody(Account);
 
-#[post("/owner?<secret>", data = "<owner_request_body>")]
+#[post("/?<secret>", data = "<owner_request_body>")]
 pub async fn setup_owner(
     environment: &State<Environment>,
     mongodb: &State<MongoDB>,

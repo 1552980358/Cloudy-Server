@@ -20,7 +20,7 @@ struct FindAccountView {
     pub id: String
 }
 
-#[get("/find/<identity>?<allow_blank_response>")]
+#[get("/<identity>?<allow_blank_response>")]
 pub async fn find_account(
     mongodb: &State<MongoDB>,
     identity: &str,
