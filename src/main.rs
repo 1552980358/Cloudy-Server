@@ -13,6 +13,8 @@ use api::RocketMountApi;
 mod rocket;
 
 mod environment;
+mod util;
+
 use environment::Environment;
 
 #[cfg(not(debug_assertions))]
