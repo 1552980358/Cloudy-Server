@@ -1,10 +1,10 @@
-use mongodb::bson::doc;
+use mongodb::bson::{doc, to_document};
 use mongodb::bson::serde_helpers::deserialize_hex_string_from_object_id;
 use mongodb::options::FindOneOptions;
 use Rocket::http::Status;
 use Rocket::response::Redirect;
 use Rocket::State;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::mongodb::collection::account::{
     AccountCollection,
@@ -13,8 +13,14 @@ use crate::mongodb::collection::account::{
 
 use crate::mongodb::{Filter, MongoDB};
 
+#[derive(Serialize, Debug)]
+struct Projection {
+    #[serde(alias = "_id")]
+    pub id: i32
+}
+
 #[derive(Deserialize, Debug)]
-struct FindAccountView {
+struct DatabaseView {
     #[serde(alias = "_id")]
     #[serde(deserialize_with = "deserialize_hex_string_from_object_id")]
     pub id: String
@@ -30,23 +36,23 @@ pub async fn find_account(
 
     let filter = doc! {
         Filter::or(): [
-            { AccountField::username(): identity },
-            { AccountField::email(): identity }
+            doc! { AccountField::username(): identity },
+            doc! { AccountField::email(): identity }
         ]
     };
-    let projection = doc! {
-        AccountField::id(): 1
-    };
+    let projection = Projection { id: 1 };
+    let projection_document = to_document(&projection)
+        .map_err(|_| Status::InternalServerError)?;
     let find_one_options = FindOneOptions::builder()
-        .projection(projection)
+        .projection(projection_document)
         .build();
 
-    mongodb.account_view::<FindAccountView>()
+    mongodb.account_view::<DatabaseView>()
         .find_one(filter, find_one_options)
         .await
         .map_err(|_| Status::InternalServerError)?
-        .map(|find_account_view| {
-            Redirect::to(format!("/account/{}", find_account_view.id))
+        .map(|database_view| {
+            Redirect::to(format!("/account/{}", database_view.id))
         })
         .ok_or_else(|| {
             if allow_blank_response { Status::Ok }

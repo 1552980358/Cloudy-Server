@@ -1,23 +1,28 @@
-use mongodb::bson::doc;
+use mongodb::bson::to_document;
 use mongodb::Collection;
+use serde::Serialize;
+
 use crate::mongodb::collection::Account;
 
-type LoginResult = mongodb::error::Result<Option<Account>>;
+type Result = mongodb::error::Result<Option<Account>>;
+
+#[derive(Serialize, Debug)]
+struct Filter {
+    username: String,
+    password: String,
+}
 
 #[async_trait]
 pub trait Login {
-    async fn login(&self, username: String, password: String) -> LoginResult;
+    async fn login(&self, username: String, password: String) -> Result;
 }
 
-const FILTER_USERNAME: &str = "username";
-const FILTER_PASSWORD: &str = "password";
 #[async_trait]
 impl Login for Collection<Account> {
-    async fn login(&self, username: String, password: String) -> LoginResult {
-        let filter = doc! {
-            FILTER_USERNAME: username,
-            FILTER_PASSWORD: password,
-        };
-        self.find_one(filter, None).await
+    async fn login(&self, username: String, password: String) -> Result {
+        let filter = Filter { username, password };
+        let filter_document = to_document(&filter)?;
+
+        self.find_one(filter_document, None).await
     }
 }

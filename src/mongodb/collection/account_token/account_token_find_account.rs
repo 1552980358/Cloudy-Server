@@ -1,40 +1,40 @@
-use mongodb::bson::doc;
-use mongodb::bson::oid::ObjectId;
-use mongodb::error::Result;
+use mongodb::bson::to_document;
+use mongodb::bson::serde_helpers::serialize_hex_string_as_object_id;
 use mongodb::Collection;
+use serde::Serialize;
 
-use crate::mongodb::collection::account_token::{
-    AccountToken,
-    Field as AccountTokenField
-};
+use crate::mongodb::collection::account_token::AccountToken;
 
-type FindAccountResult = Result<Option<String>>;
+type Result = mongodb::error::Result<Option<String>>;
+
+#[derive(Serialize, Debug)]
+struct Filter {
+    #[serde(rename = "_id")]
+    #[serde(serialize_with = "serialize_hex_string_as_object_id")]
+    id: String,
+    issue: usize,
+    expiry: usize,
+}
 
 #[async_trait]
 pub trait FindAccount {
-
-    async fn find_account(&self, tok: String, iat: usize, exp: usize) -> FindAccountResult;
-
+    async fn find_account(&self, tok: String, iat: usize, exp: usize) -> Result;
 }
-
 
 #[async_trait]
 impl FindAccount for Collection<AccountToken> {
-    async fn find_account(&self, tok: String, iat: usize, exp: usize) -> FindAccountResult {
-        let object_id = ObjectId::parse_str(tok)
-            .map_err(|_| {
-                use mongodb::error::{Error, ErrorKind};
-                Error::custom(ErrorKind::BsonSerialization)
-            })?;
-
-        let filter = doc! {
-            AccountTokenField::id(): object_id,
-            AccountTokenField::issue(): iat as i64,
-            AccountTokenField::expiry(): exp as i64,
+    async fn find_account(&self, tok: String, iat: usize, exp: usize) -> Result {
+        let filter = Filter {
+            id: tok, issue: iat, expiry: exp
         };
+        let filter_document = to_document(&filter)?;
 
-        let account = self.find_one(filter, None).await?
-            .map(|account_token| account_token.account);
-        Ok(account)
+        self.find_one(filter_document, None)
+            .await
+            .map(|account_token_option| {
+                account_token_option.map(|account_token| {
+                    account_token.account
+                })
+            })
     }
 }
