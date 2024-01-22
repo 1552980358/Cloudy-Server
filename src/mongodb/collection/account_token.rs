@@ -33,8 +33,8 @@ pub struct AccountToken {
     #[serde(deserialize_with = "deserialize_hex_string_from_object_id")]
     pub account: String,
 
-    pub issue: usize,
-    pub expiry: usize,
+    pub issue: u64,
+    pub expiry: u64,
 
     pub valid: bool,
 
@@ -42,7 +42,7 @@ pub struct AccountToken {
 
 impl AccountToken {
 
-    pub fn new(account: Account, issue: usize, duration: usize) -> Self {
+    pub fn new(account: Account, issue: u64, duration: u64) -> Self {
         let id = ObjectId::new().to_hex();
         let account = account.id;
 

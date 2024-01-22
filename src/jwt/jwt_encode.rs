@@ -25,8 +25,8 @@ impl JWT {
     pub fn encode(
         &self,
         token_id: String,
-        issue_at: usize,
-        expire_at: usize
+        issue_at: u64,
+        expire_at: u64
     ) -> JWTResult {
         let header = self.header();
         let encoding_key = self.encoding_key();

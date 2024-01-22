@@ -1,4 +1,3 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 use Rocket::data::{FromData, Outcome};
 use rocket::State;
 use rocket::http::Status;
@@ -18,6 +17,7 @@ use crate::mongodb::collection::account_token::{
     Register
 };
 use crate::rocket::{PostData, RequestHeader};
+use crate::util::time::system_time_secs;
 
 #[derive(Deserialize, Debug)]
 pub struct AuthRequestBody {
@@ -77,13 +77,13 @@ impl<'r> FromData<'r> for AuthRequestBody {
 
 }
 
-const DURATION_DEFAULT: usize = 604800usize;
+const DURATION_DEFAULT: u64 = 604800;
 
 #[post("/?<duration>", data = "<auth_request_body>")]
 pub async fn login_auth(
     mongodb: &State<MongoDB>,
     jwt: &State<JWT>,
-    duration: Option<usize>,
+    duration: Option<u64>,
     auth_request_body: AuthRequestBody
 ) -> Result<String, Status> {
     // Request account information
@@ -93,13 +93,13 @@ pub async fn login_auth(
 
     // Prepare for register credential
     // Issue time
-    let Some(issue) = time_secs() else {
+    let Ok(issue) = system_time_secs() else {
         return Err(Status::InternalServerError);
     };
     let duration = duration.unwrap_or_else(|| DURATION_DEFAULT);
 
     // Register and return
-    let Some(account_token) = register_token(mongodb, account, issue, duration).await else {
+    let Ok(account_token) = register_token(mongodb, account, issue, duration).await else {
         return Err(Status::InternalServerError);
     };
     jwt_encode(jwt, account_token).ok_or_else(|| Status::InternalServerError)
@@ -113,17 +113,9 @@ async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<
         .flatten()
 }
 
-fn time_secs() -> Option<usize> {
-    SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .map(|duration| duration.as_secs())
-        .map(|time_secs| time_secs as usize)
-        .ok()
-}
-
 async fn register_token(
-    mongodb: &MongoDB, account: Account, issue: usize, duration: usize
-) -> Option<AccountToken> {
+    mongodb: &MongoDB, account: Account, issue: u64, duration: u64
+) -> mongodb::error::Result<AccountToken> {
     mongodb.account_token()
         .register(account, issue, duration)
         .await

@@ -3,14 +3,14 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct JWTClaims {
     pub tok: String,
-    pub iat: usize,
-    pub exp: usize
+    pub iat: u64,
+    pub exp: u64
 }
 
 impl JWTClaims {
 
     pub fn new(
-        token_id: String, issue_at: usize, expire_at: usize
+        token_id: String, issue_at: u64, expire_at: u64
     ) -> Self {
         Self {
             tok: token_id,
