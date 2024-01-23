@@ -36,13 +36,15 @@ pub struct AccountToken {
     pub issue: u64,
     pub expiry: u64,
 
+    pub renewal: bool,
+
     pub valid: bool,
 
 }
 
 impl AccountToken {
 
-    pub fn new(account: Account, issue: u64, duration: u64) -> Self {
+    pub fn new(account: Account, issue: u64, duration: u64, renewal: bool) -> Self {
         let id = ObjectId::new().to_hex();
         let account = account.id;
 
@@ -51,6 +53,7 @@ impl AccountToken {
             account,
             issue,
             expiry: issue + duration,
+            renewal,
             valid: true
         }
     }

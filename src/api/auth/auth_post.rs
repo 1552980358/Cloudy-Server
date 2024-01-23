@@ -79,11 +79,12 @@ impl<'r> FromData<'r> for AuthRequestBody {
 
 const DURATION_DEFAULT: u64 = 604800;
 
-#[post("/?<duration>", data = "<auth_request_body>")]
+#[post("/?<duration>&<disposable>", data = "<auth_request_body>")]
 pub async fn login_auth(
     mongodb: &State<MongoDB>,
     jwt: &State<JWT>,
     duration: Option<u64>,
+    disposable: Option<bool>,
     auth_request_body: AuthRequestBody
 ) -> Result<String, Status> {
     // Request account information
@@ -97,9 +98,14 @@ pub async fn login_auth(
         return Err(Status::InternalServerError);
     };
     let duration = duration.unwrap_or_else(|| DURATION_DEFAULT);
+    // If not specified, allow to renewal
+    let renewal = !disposable.unwrap_or_else(|| false);
+    let register_token = mongodb.account_token()
+        .register(account, issue, duration, renewal)
+        .await;
 
     // Register and return
-    let Ok(account_token) = register_token(mongodb, account, issue, duration).await else {
+    let Ok(account_token) = register_token else {
         return Err(Status::InternalServerError);
     };
     jwt_encode(jwt, account_token).ok_or_else(|| Status::InternalServerError)
@@ -111,14 +117,6 @@ async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<
         .await
         .ok()
         .flatten()
-}
-
-async fn register_token(
-    mongodb: &MongoDB, account: Account, issue: u64, duration: u64
-) -> mongodb::error::Result<AccountToken> {
-    mongodb.account_token()
-        .register(account, issue, duration)
-        .await
 }
 
 fn jwt_encode(jwt: &JWT, account_token: AccountToken) -> Option<String> {
