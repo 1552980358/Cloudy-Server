@@ -1,4 +1,4 @@
-use jsonwebtoken::{Algorithm, DecodingKey, Validation};
+use jsonwebtoken::{DecodingKey, Validation};
 
 use crate::jwt::JWTClaims;
 use crate::jwt::JWT;
@@ -12,14 +12,7 @@ impl JWT {
     }
 
     fn validation(&self) -> Validation {
-        match () {
-            _ if self.algorithm == Algorithm::default() => {
-                Validation::default()
-            }
-            _ => {
-                Validation::new(self.algorithm)
-            }
-        }
+        Validation::new(self.algorithm)
     }
 
     pub fn decode(
