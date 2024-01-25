@@ -8,14 +8,14 @@ const ENVIRONMENT_JWT_ALGORITHM: &str = "ALGORITHM";
 
 pub trait JWTEnvironment {
 
-    fn jwt(&self, field: &str) -> Option<String>;
+    fn jwt(&mut self, field: &str) -> Option<String>;
 
-    fn jwt_secret(&self) -> String {
+    fn jwt_secret(&mut self) -> String {
         self.jwt(ENVIRONMENT_JWT_SECRET)
             .unwrap_or_else(|| jwt_panic!("Secret required!"))
     }
 
-    fn jwt_algorithm(&self) -> Option<String> {
+    fn jwt_algorithm(&mut self) -> Option<String> {
         self.jwt(ENVIRONMENT_JWT_ALGORITHM)
     }
 
@@ -23,8 +23,8 @@ pub trait JWTEnvironment {
 
 impl JWTEnvironment for Environment {
 
-    fn jwt(&self, field: &str) -> Option<String> {
-        self.variable(ENVIRONMENT_JWT, field)
+    fn jwt(&mut self, field: &str) -> Option<String> {
+        self.take_variable(ENVIRONMENT_JWT, field)
     }
 
 }

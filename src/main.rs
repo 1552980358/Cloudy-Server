@@ -40,9 +40,9 @@ use rocket::{CORS, OPTIONS};
 #[cfg(debug_assertions)]
 #[launch]
 async fn server() -> _ {
-    let environment = Environment::setup();
-    let mongodb = MongoDB::setup(&environment);
-    let jwt = JWT::setup(&environment);
+    let mut environment = Environment::setup();
+    let mongodb = MongoDB::setup(&mut environment);
+    let jwt = JWT::setup(&mut environment);
 
     // Have a ping test first
     let _ = mongodb.ping().await;

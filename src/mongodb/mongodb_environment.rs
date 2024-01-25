@@ -10,36 +10,36 @@ const ENVIRONMENT_MONGODB_DATABASE: &str = "DATABASE";
 
 pub trait MongoDBEnvironment {
 
-    fn mongodb(&self, field: &str) -> Option<String>;
+    fn mongodb(&mut self, field: &str) -> Option<String>;
 
-    fn mongodb_host(&self) -> Option<String> {
+    fn mongodb_host(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_HOST)
     }
 
-    fn mongodb_port(&self) -> Option<String> {
+    fn mongodb_port(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_PORT)
     }
 
-    fn mongodb_source(&self) -> Option<String> {
+    fn mongodb_source(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_SOURCE)
     }
 
-    fn mongodb_username(&self) -> Option<String> {
+    fn mongodb_username(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_USERNAME)
     }
 
-    fn mongodb_password(&self) -> Option<String> {
+    fn mongodb_password(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_PASSWORD)
     }
 
-    fn mongodb_database(&self) -> Option<String> {
+    fn mongodb_database(&mut self) -> Option<String> {
         self.mongodb(ENVIRONMENT_MONGODB_DATABASE)
     }
 
 }
 
 impl MongoDBEnvironment for Environment {
-    fn mongodb(&self, field: &str) -> Option<String> {
-        self.variable(ENVIRONMENT_MONGODB, field)
+    fn mongodb(&mut self, field: &str) -> Option<String> {
+        self.take_variable(ENVIRONMENT_MONGODB, field)
     }
 }

@@ -10,7 +10,7 @@ use crate::mongodb::{
 
 impl MongoDB {
 
-    pub fn setup(environment: &Environment) -> Self {
+    pub fn setup(environment: &mut Environment) -> Self {
         let server_host = environment.mongodb_host();
         let server_port = environment.mongodb_port();
 

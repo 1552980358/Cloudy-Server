@@ -10,7 +10,7 @@ use crate::jwt::{
 
 impl JWT {
 
-    pub fn setup(environment: &Environment) -> Self {
+    pub fn setup(environment: &mut Environment) -> Self {
         let secret = environment.jwt_secret();
         let algorithm = environment.jwt_algorithm()
             .map(|algorithm| Algorithm::from_str(&*algorithm).ok())

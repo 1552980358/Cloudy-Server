@@ -16,7 +16,7 @@ pub trait SetupEnvironment {
 impl SetupEnvironment for Environment {
 
     fn setup(&self, field: &str) -> Option<String> {
-        self.variable(ENVIRONMENT_SETUP, field)
+        self.read_variable(ENVIRONMENT_SETUP, field)
     }
 
 }
