@@ -19,7 +19,7 @@ impl Environment {
         format!("{}{}{}", scheme, Environment::divider(), field)
     }
 
-    pub fn variable(&self, key: &String) -> Option<String> {
+    fn variable(&self, key: &String) -> Option<String> {
         self.variables.get(key)
             .map(|variable| variable.to_owned())
     }
