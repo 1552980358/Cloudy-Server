@@ -12,19 +12,12 @@ impl JWT {
 
     pub fn setup(environment: &Environment) -> Self {
         let secret = environment.jwt_secret();
-        let algorithm = jwt_algorithm(environment.jwt_algorithm());
+        let algorithm = environment.jwt_algorithm()
+            .map(|algorithm| Algorithm::from_str(&*algorithm).ok())
+            .flatten()
+            .unwrap_or_default();
 
         JWT::new(secret, algorithm)
     }
 
-}
-
-fn jwt_algorithm(algorithm: Option<String>) -> Algorithm {
-    match algorithm {
-        Some(algorithm) => {
-            Algorithm::from_str(algorithm.as_str())
-                .unwrap_or(Algorithm::default())
-        }
-        None => { Algorithm::default() }
-    }
 }
