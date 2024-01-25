@@ -10,8 +10,6 @@ use owner_post::setup_owner as post;
 
 const ROUTE_OWNER: &str = "/owner";
 pub fn routes() -> Vec<Route> {
-    routes![
-        get,
-        post
-    ].add_parent_route(ROUTE_OWNER)
+    routes![get, post]
+        .add_parent_route(ROUTE_OWNER)
 }

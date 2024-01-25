@@ -6,7 +6,5 @@ use crate::api::ChildRouteVec;
 
 const ROUTE_FIND: &str = "/find";
 pub fn routes() -> Vec<Route> {
-    routes![
-        get
-    ].add_parent_route(ROUTE_FIND)
+    routes![get].add_parent_route(ROUTE_FIND)
 }

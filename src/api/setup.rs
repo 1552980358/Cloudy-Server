@@ -7,6 +7,7 @@ mod owner;
 
 mod setup_environment;
 use setup_environment::SetupEnvironment;
+use crate::concat_vec;
 
 const ROUTE_SETUP: &str = "/setup";
 pub fn route<'a>() -> &'a str {
@@ -14,11 +15,10 @@ pub fn route<'a>() -> &'a str {
 }
 
 pub fn routes() -> Vec<Route> {
-    vec![
+    concat_vec![
         /* /setup */
         routes![get],
-
         /* /setup/owner */
         owner::routes()
-    ].concat()
+    ]
 }
