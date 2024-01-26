@@ -34,3 +34,6 @@ version = "9.2.0"
 
 [dependencies.base64]
 version = "0.21.7"
+
+[dependencies.regex]
+version = "1.10.3"
