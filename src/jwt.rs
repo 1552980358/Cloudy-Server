@@ -18,6 +18,9 @@ pub use jwt_auth::Auth;
 mod jwt_state;
 pub use jwt_state::JWTState;
 
+mod jwt_authorization_header;
+pub use jwt_authorization_header::JWTAuthorizationHeader;
+
 macro_rules! jwt_panic {
     ($display:expr) => {
         panic!("JWT Panic: {}", $display)
