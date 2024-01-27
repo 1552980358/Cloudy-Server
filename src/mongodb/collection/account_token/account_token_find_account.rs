@@ -18,14 +18,14 @@ struct Filter {
 
 #[async_trait]
 pub trait FindAccount {
-    async fn find_account(&self, tok: String, iat: u64, exp: u64) -> Result;
+    async fn find_account(&self, tok: &String, iat: &u64, exp: &u64) -> Result;
 }
 
 #[async_trait]
 impl FindAccount for Collection<AccountToken> {
-    async fn find_account(&self, tok: String, iat: u64, exp: u64) -> Result {
+    async fn find_account(&self, tok: &String, iat: &u64, exp: &u64) -> Result {
         let filter = Filter {
-            id: tok, issue: iat, expiry: exp
+            id: tok.to_owned(), issue: *iat, expiry: *exp
         };
         let filter_document = to_document(&filter)?;
 

@@ -34,7 +34,7 @@ impl<'r> FromRequest<'r> for Auth {
 
         // Verify from database
         mongodb.account_token()
-            .find_account(jwt_claims.tok, jwt_claims.iat, jwt_claims.exp)
+            .find_account(&jwt_claims.tok, &jwt_claims.iat, &jwt_claims.exp)
             .await
             .map(|account| account.map(|account| Auth(account)))
             .ok()
