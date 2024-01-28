@@ -101,14 +101,15 @@ pub async fn login_auth(
     // If not specified, allow to renewal
     let renewal = !disposable.unwrap_or_else(|| false);
     let register_token = mongodb.account_token()
-        .register(account, issue, duration, renewal)
+        .register_new(&account.id, &issue, &duration, &renewal)
         .await;
 
     // Register and return
     let Ok(account_token) = register_token else {
         return Err(Status::InternalServerError);
     };
-    jwt_encode(jwt, account_token).ok_or_else(|| Status::InternalServerError)
+    jwt.encode(account_token.id, account_token.issue, account_token.expiry)
+        .map_err(|_| Status::InternalServerError)
 }
 
 async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<Account> {
@@ -117,9 +118,4 @@ async fn login(mongodb: &MongoDB, auth_request_body: AuthRequestBody) -> Option<
         .await
         .ok()
         .flatten()
-}
-
-fn jwt_encode(jwt: &JWT, account_token: AccountToken) -> Option<String> {
-    jwt.encode(account_token.id, account_token.issue, account_token.expiry)
-        .ok()
 }

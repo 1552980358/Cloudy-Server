@@ -17,9 +17,9 @@ pub use account_token_register::Register;
 
 use crate::mongodb::{
     collection::Collection as MongoDBCollection,
-    collection::Account,
     MongoDB
 };
+use crate::mongodb::object_id::object_new_hex;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountToken {
@@ -43,21 +43,16 @@ pub struct AccountToken {
 }
 
 impl AccountToken {
-
-    pub fn new(account: Account, issue: u64, duration: u64, renewal: bool) -> Self {
-        let id = ObjectId::new().to_hex();
-        let account = account.id;
-
+    pub fn new(account_id: String, issue: u64, duration: u64, renewal: bool) -> Self {
         Self {
-            id,
-            account,
+            id: object_new_hex(),
+            account: account_id,
             issue,
             expiry: issue + duration,
             renewal,
             valid: true
         }
     }
-
 }
 
 pub trait AccountTokenCollection {
