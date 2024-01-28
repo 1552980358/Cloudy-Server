@@ -1,7 +1,7 @@
 use jsonwebtoken::{Algorithm, EncodingKey, Header};
 
 use crate::jwt::JWT;
-use crate::jwt::JWTClaims;
+use crate::jwt::Claims;
 
 type JWTResult = jsonwebtoken::errors::Result<String>;
 
@@ -30,11 +30,9 @@ impl JWT {
     ) -> JWTResult {
         let header = self.header();
         let encoding_key = self.encoding_key();
-        let jwt_claims = JWTClaims::new(token_id, issue_at, expire_at);
+        let claims = Claims::new(token_id, issue_at, expire_at);
 
-        jsonwebtoken::encode(
-            &header, &jwt_claims, &encoding_key
-        )
+        jsonwebtoken::encode(&header, &claims, &encoding_key)
     }
 
 }

@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct JWTClaims {
+pub struct Claims {
     pub tok: String,
     pub iat: u64,
     pub exp: u64
 }
 
-impl JWTClaims {
+impl Claims {
 
     pub fn new(
         token_id: String, issue_at: u64, expire_at: u64

@@ -6,7 +6,7 @@ use jwt_environment::JWTEnvironment;
 mod jwt_setup;
 
 mod jwt_claims;
-use jwt_claims::JWTClaims;
+pub use jwt_claims::Claims;
 
 mod jwt_encode;
 

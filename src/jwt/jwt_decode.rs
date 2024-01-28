@@ -1,9 +1,9 @@
 use jsonwebtoken::{DecodingKey, Validation};
 
-use crate::jwt::JWTClaims;
+use crate::jwt::Claims;
 use crate::jwt::JWT;
 
-type Result = jsonwebtoken::errors::Result<JWTClaims>;
+type Result = jsonwebtoken::errors::Result<Claims>;
 
 impl JWT {
 
