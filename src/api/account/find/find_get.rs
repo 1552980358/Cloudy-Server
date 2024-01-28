@@ -11,7 +11,7 @@ use crate::mongodb::collection::account::{
     Field as AccountField
 };
 
-use crate::mongodb::{Filter, MongoDB};
+use crate::mongodb::{Operator, MongoDB};
 
 #[derive(Serialize, Debug)]
 struct Projection {
@@ -35,7 +35,7 @@ pub async fn find_account(
     let allow_blank_response = allow_blank_response.unwrap_or_else(|| false);
 
     let filter = doc! {
-        Filter::or(): [
+        Operator::logical_query_or(): vec! [
             doc! { AccountField::username(): identity },
             doc! { AccountField::email(): identity }
         ]

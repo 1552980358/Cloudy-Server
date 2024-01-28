@@ -16,8 +16,8 @@ mod mongodb_ping;
 mod mongodb_state;
 pub use mongodb_state::MongoDBState;
 
-mod mongodb_filter;
-pub use mongodb_filter::Filter;
+mod mongodb_operator;
+pub use mongodb_operator::Operator;
 
 macro_rules! mongodb_panic {
     ($display:expr) => {
