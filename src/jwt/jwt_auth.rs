@@ -28,7 +28,7 @@ impl<'r> FromRequest<'r> for Auth {
             return Outcome::Error((Status::InternalServerError, ()))
         };
 
-        let Ok(jwt_claims) = jwt.decode(authorization) else {
+        let Ok(jwt_claims) = jwt.decode_default(authorization) else {
             return Outcome::Error((Status::Unauthorized, ()))
         };
 
