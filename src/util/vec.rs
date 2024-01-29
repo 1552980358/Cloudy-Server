@@ -7,5 +7,3 @@ macro_rules! concat_vec {
         vec![$($x),+].concat()
     );
 }
-
-pub use concat_vec;
