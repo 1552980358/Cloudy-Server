@@ -12,7 +12,6 @@ use crate::mongodb::collection::account::{
     Login
 };
 use crate::mongodb::collection::account_token::{
-    AccountToken,
     AccountTokenCollection,
     Register
 };
