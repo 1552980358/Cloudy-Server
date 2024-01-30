@@ -1,7 +1,11 @@
+use rocket::Route;
+
+use crate::concat_vec;
+
 mod auth_post;
 use auth_post::login_auth as post;
 
-use rocket::Route;
+mod renew;
 
 const ROUTE_AUTH: &str = "/auth";
 pub fn route<'a>() -> &'a str {
@@ -9,7 +13,8 @@ pub fn route<'a>() -> &'a str {
 }
 
 pub fn routes() -> Vec<Route> {
-    routes![
-        post,
+    concat_vec![
+        routes![post],
+        renew::routes()
     ]
 }
