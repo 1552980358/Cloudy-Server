@@ -5,11 +5,11 @@ use serde::Serialize;
 
 use crate::mongodb::collection::account_token::AccountToken;
 
-type Result = mongodb::error::Result<Option<String>>;
 type Result<T> = mongodb::error::Result<Option<T>>;
 
 #[async_trait]
 pub trait FindAccount {
+
     async fn filter_account_token(&self, tok: &String, iat: &u64, exp: &u64) -> Result<AccountToken>;
 
     async fn find_account_id(&self, tok: &String, iat: &u64, exp: &u64) -> Result<String> {
@@ -21,6 +21,19 @@ pub trait FindAccount {
                 })
             })
     }
+
+    async fn find_account_id_with_renewal(
+        &self, tok: &String, iat: &u64, exp: &u64
+    ) -> Result<(String, bool)> {
+        self.filter_account_token(tok, iat, exp)
+            .await
+            .map(|account_token_option| {
+                account_token_option.map(|account_token| {
+                    (account_token.account, account_token.renewal)
+                })
+            })
+    }
+
 }
 
 #[derive(Serialize, Debug)]
