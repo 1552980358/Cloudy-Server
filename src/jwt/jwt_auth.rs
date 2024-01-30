@@ -29,12 +29,12 @@ impl<'r> FromRequest<'r> for Auth {
         };
 
         let Ok(jwt_claims) = jwt.decode_default(authorization) else {
-            return Outcome::Error((Status::Unauthorized, ()))
+            return Outcome::Error((Status::Forbidden, ()))
         };
 
         // Verify from database
         mongodb.account_token()
-            .find_account(&jwt_claims.tok, &jwt_claims.iat, &jwt_claims.exp)
+            .find_account_id(&jwt_claims.tok, &jwt_claims.iat, &jwt_claims.exp)
             .await
             .map(|account| account.map(|account| Auth(account)))
             .ok()

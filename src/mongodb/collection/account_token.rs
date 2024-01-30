@@ -1,4 +1,3 @@
-use mongodb::bson::oid::ObjectId;
 use mongodb::bson::serde_helpers::{
     serialize_hex_string_as_object_id,
     deserialize_hex_string_from_object_id
