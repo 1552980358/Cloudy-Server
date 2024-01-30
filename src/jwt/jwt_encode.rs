@@ -3,7 +3,7 @@ use jsonwebtoken::{Algorithm, EncodingKey, Header};
 use crate::jwt::JWT;
 use crate::jwt::Claims;
 
-type JWTResult = jsonwebtoken::errors::Result<String>;
+type Result<T> = jsonwebtoken::errors::Result<T>;
 
 impl JWT {
 
@@ -27,7 +27,7 @@ impl JWT {
         token_id: String,
         issue_at: u64,
         expire_at: u64
-    ) -> JWTResult {
+    ) -> Result<String> {
         let header = self.header();
         let encoding_key = self.encoding_key();
         let claims = Claims::new(token_id, issue_at, expire_at);
