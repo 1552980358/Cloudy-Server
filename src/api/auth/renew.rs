@@ -1,5 +1,4 @@
 use Rocket::Route;
-use crate::concat_vec;
 
 mod renew_get;
 use renew_get::renew_token as get;
