@@ -8,7 +8,7 @@ pub trait JWTAuthorizationHeader {
     fn jwt_authorization_header(&self) -> Result;
 }
 
-const AUTHORIZATION_REGEX: &str = r"JWT (?<jwt>^([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*))";
+const AUTHORIZATION_REGEX: &str = r"JWT (?<jwt>([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_=]+)\.([a-zA-Z0-9_\-+/=]*))";
 const AUTHORIZATION_REGEX_JWT: &str = "jwt";
 impl JWTAuthorizationHeader for Request<'_> {
     fn jwt_authorization_header(&self) -> Result {
