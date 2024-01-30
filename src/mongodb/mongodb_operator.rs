@@ -6,3 +6,10 @@ impl Operator {
         LOGICAL_QUERY_OR
     }
 }
+
+const FIELD_UPDATE_SET: &str = "$set";
+impl Operator {
+    pub fn field_update_set<'a>() -> &'a str {
+        FIELD_UPDATE_SET
+    }
+}
